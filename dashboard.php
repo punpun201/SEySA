@@ -10,7 +10,7 @@ $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema Académico</title>
+    <title>Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Interfaz/css/style2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -22,18 +22,19 @@ $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
             <img src="img/user-profile.png" alt="Perfil">
-            <span>Usuario</span>
+            <span> Usuario</span>
         </div>
     </nav>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
+            <li><a href="dashboard.php"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
             <li><a href="#"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
             <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
+            <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Calificación</span></a></li>
             <li><a href="#"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
-            <li><a href="#"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
+            <li><a href="lista.php"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
         </ul>
     </div>
 
@@ -67,7 +68,7 @@ $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="Interfaz/js/script.js"></script>
 
 </body>
 </html>
