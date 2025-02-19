@@ -10,11 +10,11 @@
 </head>
 <body>
     <div class="formulario">
-        <form method="post" action="controlador/login.php" class="inicio" onsubmit="return validarFormulario()"> 
+        <form method="post" action="Funcionamiento/login.php" class="inicio" onsubmit="return validarFormulario()"> 
             <h1>Iniciar sesión</h1>
             <div id="usuario" class="usuario">
                 <input type="text" id="usuarioInput" name="correo" required> 
-                <label for="usuario">Correo</label>
+                <label for="usuario">Usuario</label>
             </div>
             <div id="contraseña" class="contraseña">
                 <input type="password" id="contraseñaInput" name="contraseña" required> 
@@ -28,6 +28,16 @@
     </div>
 
     <!-- Modal de Error -->
+     <!-- Rol adminsitrador y profe:
+      edgar.prueba@email.com
+      admin123 -->
+      <!-- profe:
+      docente.prueba@email.com
+      profe123 -->
+      <!-- alumno:
+      alumno.prueba@email.com
+      pen123 -->
+
     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

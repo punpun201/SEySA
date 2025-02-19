@@ -1,0 +1,19 @@
+# Habilitar RewriteEngine
+RewriteEngine On
+
+# Evitar el acceso directo a archivos sensibles
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)\.(php|sql|config)$ - [F,L]
+
+# Redirigir a index.php con parámetros amigables
+RewriteRule ^dashboard/([a-zA-Z0-9_-]+)$ dashboard.php?seccion=$1 [L,QSA]
+
+# Manejo de rutas sin barra final (evita redirecciones erróneas)
+RewriteCond %{REQUEST_URI} !/$
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ $1/ [R=301,L]
+
+# Redirigir tráfico no definido a index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]

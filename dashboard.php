@@ -1,8 +1,16 @@
 <?php
 session_start();
+if (!isset($_SESSION['id_usuario'])) {
+    header('Location: index.php?error=Debes iniciar sesión.');
+    exit();
+}
 
-/*$usuarioLogueado = isset($_SESSION['usuario']);
-$tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '';*/
+$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
+
+// Verifica los roles del usuario
+$es_admin = in_array("Administrador", $_SESSION['roles']);
+$es_docente = in_array("Docente", $_SESSION['roles']);
+$es_alumno = in_array("Alumno", $_SESSION['roles']);
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +20,7 @@ $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="Interfaz/css/style2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
@@ -21,20 +30,24 @@ $tipo_usuario = isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : '
     <nav class="navbar">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
-            <img src="img/user-profile.png" alt="Perfil">
-            <span> Usuario</span>
+            <a href="perfil.php" class="profile-link">
+                <img src="img/user-profile.png" alt="Perfil">
+                <span><?php echo $_SESSION['nombre']; ?></span>
+            </a>
         </div>
     </nav>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul>
-            <li><a href="dashboard.php"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
-            <li><a href="#"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Calificación</span></a></li>
-            <li><a href="#"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
-            <li><a href="lista.php"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
+            <li><a href="#" data-section="inicio"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
+            <li><a href="#" data-section="materias"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
+            <li><a href="#" data-section="estadisticas"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
+            <li><a href="#" data-section="calificacion"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
+            <li><a href="#" data-section="notificaciones"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
+            <?php if ($es_admin): ?>
+                <li><a href="#" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
+            <?php endif; ?>
         </ul>
     </div>
 

@@ -9,7 +9,7 @@ body {
 .navbar {
     width: 100%;
     background: #4A148C;
-    padding: 7px;
+    padding: 5px;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -35,13 +35,38 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
 }
 
+/* Estilo para el enlace del perfil */
+.profile-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Imagen del perfil */
 .profile img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
+    border: 2px solid white;
+    transition: transform 0.3s ease;
+}
+
+/* Efecto hover en el perfil */
+.profile:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Efecto hover en la imagen */
+.profile:hover img {
+    transform: scale(1.1);
 }
 
 /* Sidebar */
@@ -74,7 +99,7 @@ body {
 .sidebar ul {
     list-style: none;
     padding: 0;
-    flex-grow: 1; /* Hace que los enlaces ocupen el espacio disponible */
+    flex-grow: 1; 
 }
 
 .sidebar ul li {
