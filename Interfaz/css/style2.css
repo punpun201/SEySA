@@ -158,3 +158,50 @@ body {
 .info-card:hover {
     transform: translateY(-5px);
 }
+
+/* Estilos para la barra de búsqueda */
+.small-search {
+    width: 10%;  
+}
+
+/* Ajustes en los botones */
+.btn {
+    font-size: 14px;
+}
+
+.btn i {
+    margin-right: 5px;
+}
+
+/* Ajustes generales del modal */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Encabezado del modal */
+.modal-header {
+    background: #4A148C;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Estilos para los inputs */
+.modal-body .form-control, .modal-body .form-select {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Botones dentro del modal */
+.modal-body .btn {
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+/* Ajuste de iconos dentro de los labels */
+.modal-body .form-label i {
+    margin-right: 5px;
+    color: #4A148C;
+}

@@ -40,13 +40,13 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul>
-            <li><a href="#" data-section="inicio"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
+            <li><a href="dashboard.php" data-section="inicio"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
             <li><a href="#" data-section="materias"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
             <li><a href="#" data-section="estadisticas"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
             <li><a href="#" data-section="calificacion"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
             <li><a href="#" data-section="notificaciones"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
             <?php if ($es_admin): ?>
-                <li><a href="#" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
+                <li><a href="lista.php" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
             <?php endif; ?>
         </ul>
     </div>
