@@ -1,16 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: index.php?error=Debes iniciar sesión.');
-    exit();
-}
-
-$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
-
-// Verifica los roles del usuario
-$es_admin = in_array("Administrador", $_SESSION['roles']);
-$es_docente = in_array("Docente", $_SESSION['roles']);
-$es_alumno = in_array("Alumno", $_SESSION['roles']);
+include("Funcionamiento/lista.php");
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +24,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                 <span><?php echo $_SESSION['nombre']; ?></span>
             </a>
         </div>
-    </nav>
+    </nav> 
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
@@ -46,7 +36,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             <li><a href="#"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
             <li><a href="#"><i class="fas fa-users"></i> <span class="text">Lista de usuarios</span></a></li>
         </ul>
-    </div>
+    </div> 
 
     <!-- Contenido Principal -->
     <div class="content" id="content">
@@ -80,7 +70,28 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                         </tr>
                     </thead>
                     <tbody id="tablaUsuarios">
-                        <!-- Aquí se llenarán los usuarios dinámicamente -->
+                        <?php
+                        if (mysqli_num_rows($resultado) > 0):
+                            while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                                <tr>
+                                    <td><?php echo $fila['usuario_id']; ?></td>
+                                    <td><?php echo $fila['nombre']; ?></td>
+                                    <td><?php echo $fila['rol']; ?></td>
+                                    <td><?php echo $fila['carrera'] ? $fila['carrera'] : 'N/A'; ?></td>
+                                    <td><?php echo $fila['matricula'] ? $fila['matricula'] : 'N/A'; ?></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</button>
+                                        <button class="btn btn-danger btn-sm eliminar-usuario" data-id="<?php echo $fila['usuario_id']; ?>">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endwhile;
+                        else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center">No hay usuarios registrados.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -166,18 +177,18 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="Interfaz/js/script.js"></script>
+    <script src="Interfaz/js/script2.js"></script>
 
         <!-- Modal de éxito -->
     <div class="modal fade" id="registroExitosoModal" tabindex="-1" aria-labelledby="registroExitosoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="registroExitosoModalLabel">Registro Exitoso</h5>
+                    <h5 class="modal-title" id="registroExitosoModalLabel">Registro exitoso</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    ¡El usuario ha sido registrado correctamente!
+                    ¡El alumno ha sido registrado correctamente!
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='lista.php'">Aceptar</button>
@@ -186,14 +197,23 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </div>
     </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has("registro")) {
-            var registroModal = new bootstrap.Modal(document.getElementById('registroExitosoModal'));
-            registroModal.show();
-        }
-    });
-   </script>
+        <!-- Modal de Error -->
+    <div class="modal fade" id="errorRegistroModal" tabindex="-1" aria-labelledby="errorRegistroModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="errorRegistroModalLabel">Error en el Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                    <!-- Aquí se insertarán los errores dinámicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

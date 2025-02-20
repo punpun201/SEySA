@@ -17,30 +17,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST["password"]);
 
     // Validaciones con expresiones regulares
-    $regex_nombre = "/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$/";
-    $regex_correo = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
-    $regex_matricula = "/^\d{8}$/";
-    $regex_telefono = "/^\d{10}$/";
-    $regex_password = "/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/";
-    $regex_domicilio = "/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ,. ]{5,100}$/";
-
-    if (!preg_match($regex_nombre, $nombre)) {
-        die("<script>alert('El nombre solo debe contener letras y espacios (mínimo 3 caracteres).'); window.history.back();</script>");
+    if (!preg_match("/^(?!\s*$)(?=.*[A-Za-zÁÉÍÓÚáéíóúÑñ])[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{4,}$/", $nombre)) {
+        $errores['nombre'] = "El nombre solo debe contener letras y espacios (mínimo 4 caracteres).";
     }
-    if (!preg_match($regex_correo, $correo)) {
-        die("<script>alert('Correo electrónico inválido.'); window.history.back();</script>");
+    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        $errores['correo'] = "Correo electrónico inválido.";
     }
-    if (!preg_match($regex_matricula, $matricula)) {
-        die("<script>alert('La matrícula debe contener exactamente 8 números.'); window.history.back();</script>");
+    if (!preg_match("/^\d{8}$/", $matricula)) {
+        $errores['matricula'] = "La matrícula debe contener exactamente 8 números.";
     }
-    if (!preg_match($regex_telefono, $telefono)) {
-        die("<script>alert('El teléfono debe contener exactamente 10 dígitos.'); window.history.back();</script>");
+    if (!preg_match("/^\d{10}$/", $telefono)) {
+        $errores['telefono'] = "El teléfono debe contener exactamente 10 dígitos.";
     }
-    if (!preg_match($regex_password, $password)) {
-        die("<script>alert('La contraseña debe tener al menos 8 caracteres, incluir letras y números.'); window.history.back();</script>");
+    if (!preg_match("/^[a-zA-Z0-9]{4,15}$/", $password)) {
+        $errores['password'] = "La contraseña debe tener entre 4 y 15 caracteres, sin espacios ni caracteres especiales.";
     }
-    if (!preg_match($regex_domicilio, $domicilio)) {
-        die("<script>alert('El domicilio solo puede contener letras, números, comas y puntos.'); window.history.back();</script>");
+    if (!preg_match("/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s,.:;]{5,100}$/", $domicilio)) {
+        $errores['domicilio'] = "El domicilio solo puede contener letras, números, comas y puntos.";
     }
 
     // Validar que la carrera seleccionada exista en la base de datos
@@ -88,10 +81,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($stmt_verificar);
     }
 
+    // Si hay errores, redirigir al formulario con los errores en la URL
+    if (!empty($_SESSION["errores"])) {
+        header("Location: ../lista.php");
+        exit();
+    }
+
     // Encriptar contraseña
     $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
-    // Definir la ruta de almacenamiento de los archivos
+    // Define la ruta de almacenamiento de los archivos
     $ruta_subida = "../uploads/";
     if (!file_exists($ruta_subida)) {
         mkdir($ruta_subida, 0777, true);
