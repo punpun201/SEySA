@@ -98,7 +98,8 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formCrearAlumno" method="POST" action="Funcionamiento/procesar_alumno.php">
+                    <!-- FORMULARIO ACTUALIZADO -->
+                    <form id="formCrearAlumno" method="POST" action="Funcionamiento/procesar_alumno.php" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nombre" class="form-label"><i class="fas fa-user"></i> Nombre Completo</label>
@@ -121,10 +122,6 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                                 <input type="text" class="form-control" id="matricula" name="matricula" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="curp" class="form-label"><i class="fas fa-id-badge"></i> CURP</label>
-                                <input type="text" class="form-control" id="curp" name="curp" required>
-                            </div>
-                            <div class="col-md-12 mb-3">
                                 <label for="domicilio" class="form-label"><i class="fas fa-map-marker-alt"></i> Domicilio</label>
                                 <input type="text" class="form-control" id="domicilio" name="domicilio">
                             </div>
@@ -132,33 +129,71 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                                 <label for="carrera_id" class="form-label"><i class="fas fa-graduation-cap"></i> Carrera</label>
                                 <select class="form-select" id="carrera_id" name="carrera_id" required>
                                     <option value="">Seleccione una carrera</option>
-                                    <!-- Opciones dinámicas -->
+                                    <option value="1">Ingeniería en Sistemas Computacionales</option>
+                                    <option value="2">Administración de Empresas</option>
+                                    <option value="3">Contaduría Pública</option>
+                                    <option value="4">Derecho</option>
+                                    <option value="5">Psicología</option>
+                                    <option value="6">Arquitectura</option>
+                                    <option value="7">Diseño Gráfico</option>
+                                    <option value="8">Ingeniería Civil</option>
+                                    <option value="9">Medicina</option>
+                                    <option value="10">Enfermería</option>
+                                    <option value="11">Marketing Digital</option>
+                                    <option value="12">Turismo</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="certificado_preparatoria" class="form-label"><i class="fas fa-file"></i> Certificado Preparatoria</label>
-                                <input type="file" class="form-control" id="certificado_preparatoria" name="certificado_preparatoria">
+                                <label for="curp" class="form-label"><i class="fas fa-file"></i> CURP</label>
+                                <input type="file" class="form-control" id="curp" name="curp" accept=".jpg,.jpeg,.png,.pdf">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="comprobante_pago" class="form-label"><i class="fas fa-receipt"></i> Comprobante de Pago</label>
-                                <input type="file" class="form-control" id="comprobante_pago" name="comprobante_pago">
+                                <label for="certificado_preparatoria" class="form-label"><i class="fas fa-file-alt"></i> Certificado de preparatoria</label>
+                                <input type="file" class="form-control" id="certificado_preparatoria" name="certificado_preparatoria" accept=".jpg,.jpeg,.png,.pdf">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="comprobante_pago" class="form-label"><i class="fas fa-receipt"></i> Comprobante de pago</label>
+                                <input type="file" class="form-control" id="comprobante_pago" name="comprobante_pago" accept=".jpg,.jpeg,.png,.pdf">
                             </div>
                         </div>
                         <div class="text-center mt-3">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Registrar
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times"></i> Cancelar
-                            </button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Registrar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Interfaz/js/script.js"></script>
+
+        <!-- Modal de éxito -->
+    <div class="modal fade" id="registroExitosoModal" tabindex="-1" aria-labelledby="registroExitosoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="registroExitosoModalLabel">Registro Exitoso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¡El usuario ha sido registrado correctamente!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="window.location.href='lista.php'">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("registro")) {
+            var registroModal = new bootstrap.Modal(document.getElementById('registroExitosoModal'));
+            registroModal.show();
+        }
+    });
+   </script>
 </body>
 </html>
