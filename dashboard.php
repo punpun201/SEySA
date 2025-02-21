@@ -21,6 +21,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <title>Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Interfaz/css/style2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
@@ -30,10 +31,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <nav class="navbar">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
-            <a href="perfil.php" class="profile-link">
-                <img src="img/user-profile.png" alt="Perfil">
-                <span><?php echo $_SESSION['nombre']; ?></span>
-            </a>
+            <a href="Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>
 
@@ -43,10 +41,10 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             <li><a href="dashboard.php" data-section="inicio"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
             <li><a href="#" data-section="materias"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
             <li><a href="#" data-section="estadisticas"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
-            <li><a href="#" data-section="calificacion"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
+            <li><a href="Calificacion.php" data-section="calificacion"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
             <li><a href="#" data-section="notificaciones"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
             <?php if ($es_admin): ?>
-                <li><a href="lista.php" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Lista de usuarios</span></a></li>
+                <li><a href="#" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Reportes</span></a></li>
             <?php endif; ?>
         </ul>
     </div>

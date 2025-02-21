@@ -2,14 +2,15 @@
 body {
     display: flex;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 18px;
 }
 
 /* Navbar */
 .navbar {
     width: 100%;
-    background: #4A148C;
-    padding: 5px;
+    background: #23395B;
+    padding: 12px;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -18,6 +19,7 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    font-size: 20px;
 }
 
 /* Botón para colapsar Sidebar */
@@ -25,48 +27,9 @@ body {
     background: none;
     border: none;
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
     margin-left: 10px;
-}
-
-/* Perfil en Navbar */
-.profile {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 10px;
-    transition: background 0.3s ease;
-}
-
-/* Estilo para el enlace del perfil */
-.profile-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none !important;
-    color: white !important;
-    font-weight: bold;
-}
-
-/* Imagen del perfil */
-.profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 2px solid white;
-    transition: transform 0.3s ease;
-}
-
-/* Efecto hover en el perfil */
-.profile:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Efecto hover en la imagen */
-.profile:hover img {
-    transform: scale(1.1);
 }
 
 /* Sidebar */
@@ -76,14 +39,15 @@ body {
     position: fixed;
     left: 0;
     top: 50px;
-    background: linear-gradient(135deg, #1E1B4B, #4A148C);
-    padding: 10px;
+    background: linear-gradient(135deg, #161925, #23395B);
+    padding: 15px;
     color: white;
     transition: width 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    font-size: 18px;
 }
 
 /* Sidebar colapsado */
@@ -103,7 +67,7 @@ body {
 }
 
 .sidebar ul li {
-    margin: 10px 0;
+    margin: 12px 0;
 }
 
 .sidebar ul li a {
@@ -111,15 +75,15 @@ body {
     color: white;
     display: flex;
     align-items: center;
-    font-size: 16px;
-    padding: 10px;
+    font-size: 18px;
+    padding: 12px;
     transition: background 0.3s ease;
     border-radius: 8px;
 }
 
 .sidebar ul li a i {
     margin-right: 15px;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .sidebar ul li a:hover {
@@ -140,68 +104,115 @@ body {
     width: calc(100% - 70px);
 }
 
+/* Ajustes Responsivos */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+    .content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+}
+
 /* Tarjetas */
 .info-card {
     background: white;
-    padding: 20px;
+    padding: 25px;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    font-size: 18px;
 }
 
 .info-card i {
-    font-size: 40px;
-    color: #4A148C;
+    font-size: 44px;
+    color: #406E8E;
 }
 
 .info-card:hover {
     transform: translateY(-5px);
 }
 
-/* Estilos para la barra de búsqueda */
-.small-search {
-    width: 10%;  
-}
-
-/* Ajustes en los botones */
+/* Botones */
 .btn {
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .btn i {
     margin-right: 5px;
 }
 
-/* Ajustes generales del modal */
-.modal-content {
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Encabezado del modal */
-.modal-header {
-    background: #4A148C;
-    color: white;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-/* Estilos para los inputs */
-.modal-body .form-control, .modal-body .form-select {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-/* Botones dentro del modal */
-.modal-body .btn {
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-}
-
 /* Ajuste de iconos dentro de los labels */
 .modal-body .form-label i {
     margin-right: 5px;
-    color: #4A148C;
+    color: #406E8E;
+}
+
+/* Botón de Cerrar Sesión */
+.logout-btn {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.logout-btn i {
+    font-size: 22px;
+}
+
+.logout-btn:hover {
+    color: #E57373;
+}
+
+/* Asegurar margen entre tarjetas */
+.card {
+    border-radius: 10px;
+}
+
+/* Espacio entre la tabla */
+.table {
+    margin-bottom: 0;
+}
+
+/* Botón más atractivo */
+.btn-primary, .btn-success, .btn-info {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Estilo de cabeceras */
+.card-header {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Hacer que las tablas sean más visibles */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#guardarCalificaciones {
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+    padding: 6px 15px; /* Ajusta el padding */
+    width: auto; /* Ajusta el ancho automáticamente */
+    display: block;
+    margin: 10px auto; /* Centra el botón */
+}
+
+.selectores-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.selectores-container .selector-box {
+    flex: 1; /* Hace que ambos elementos ocupen el mismo espacio */
+    max-width: 48%; /* Reduce su ancho */
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
