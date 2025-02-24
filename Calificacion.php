@@ -5,10 +5,10 @@ if (!isset($_SESSION['id_usuario'])) {
     exit();
 }
 
-
-$es_admin = in_array("Administrador", $_SESSION['roles']);
-$es_docente = in_array("Docente", $_SESSION['roles']);
-$es_alumno = in_array("Alumno", $_SESSION['roles']);
+$roles_usuario = $_SESSION['roles'] ?? [];
+$es_admin = in_array("Administrador", (array)$roles_usuario);
+$es_docente = in_array("Docente", (array)$roles_usuario);
+$es_alumno = in_array("Alumno", (array)$roles_usuario);
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Interfaz/css/style2.css">
 </head>
-<body>
+<body data-usuario="<?php echo $es_docente ? 'docente' : 'alumno'; ?>">
 
     <!-- Navbar -->
     <nav class="navbar">
@@ -52,17 +52,17 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             <h2 class="text-center mb-4"><i class="fas fa-graduation-cap"></i> Calificaciones</h2>
 
             <!-- Selector de período -->
-            <div class="selectores-container">
-            <div class="selector-box">
-                <label for="periodo" class="form-label">
-                    <i class="fas fa-calendar-alt"></i> Selecciona el período:
-                </label>
-                <select id="periodo" class="form-select">
-                    <option value="">Selecciona un período</option>
-                </select>
-            </div>
+            <div class="selectores-container d-flex gap-3">
+                <div class="selector-box w-50">
+                    <label for="periodo" class="form-label">
+                        <i class="fas fa-calendar-alt"></i> Selecciona el período:
+                    </label>
+                    <select id="periodo" class="form-select" data-usuario="<?php echo $es_docente ? 'docente' : 'alumno'; ?>">
+                        <option value="">Selecciona un período</option>
+                    </select>
+                </div>
 
-            <div class="selector-box">
+                <div class="selector-box w-50">
                     <label for="materiaGrupo" class="form-label">
                         <i class="fas fa-book"></i> Materias asignadas:
                     </label>
@@ -73,8 +73,9 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             </div>
 
             <!-- Para alumnos -->
-            <div id="vistaAlumno" class="d-none">
-                <div class="card shadow-sm">
+            <?php if ($es_alumno): ?>
+            <div id="vistaAlumno">
+                <div class="card shadow-sm mt-4">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0"><i class="fas fa-book-open"></i> Mis calificaciones</h5>
                     </div>
@@ -88,9 +89,6 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                                         <th>Parcial 2</th>
                                         <th>Parcial 3</th>
                                         <th>Calificación final</th>
-                                        <?php if ($es_docente): ?>
-                                            <th>Acciones</th>
-                                        <?php endif; ?>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaAlumno">
@@ -101,7 +99,11 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
 
+            <!-- Para docentes -->
+            <?php if ($es_docente): ?>
+            <div id="vistaDocente">
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-info text-white">
                         <h5 class="mb-0"><i class="fas fa-edit"></i> Registro de Calificaciones</h5>
@@ -111,13 +113,12 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                             <table class="table table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <?php if ($es_docente): ?>
                                         <th>Alumno</th>
-                                        <?php endif; ?>
                                         <th>Parcial 1</th>
                                         <th>Parcial 2</th>
                                         <th>Parcial 3</th>
                                         <th>Calificación Final</th>
+                                        <th>Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tablaDocente">
@@ -125,15 +126,11 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                                 </tbody>
                             </table>
                         </div>
-                        <?php if ($es_docente): ?>
-                        <button class="btn btn-primary btn-sm mt-3 px-3" id="guardarCalificaciones">
-                            <i class="fas fa-save"></i> Guardar Calificaciones
-                        </button>
-                    <?php endif; ?>
-                    </button>
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
+
         </div>
     </div>
 
