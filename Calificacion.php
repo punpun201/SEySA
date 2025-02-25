@@ -62,6 +62,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                     </select>
                 </div>
 
+                <?php if ($es_docente): ?>
                 <div class="selector-box w-50">
                     <label for="materiaGrupo" class="form-label">
                         <i class="fas fa-book"></i> Materias asignadas:
@@ -70,6 +71,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                         <option value="">Selecciona una materia</option>
                     </select>
                 </div>
+                <?php endif; ?>
             </div>
 
             <!-- Para alumnos -->
@@ -101,35 +103,35 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
             </div>
             <?php endif; ?>
 
-            <!-- Para docentes -->
-            <?php if ($es_docente): ?>
-            <div id="vistaDocente">
-                <div class="card shadow-sm mt-4">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="fas fa-edit"></i> Registro de Calificaciones</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Alumno</th>
-                                        <th>Parcial 1</th>
-                                        <th>Parcial 2</th>
-                                        <th>Parcial 3</th>
-                                        <th>Calificación Final</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaDocente">
-                                    <!-- Datos dinámicos -->
-                                </tbody>
-                            </table>
-                        </div>
+        <!-- Para docentes -->
+        <?php if ($es_docente): ?>
+        <div id="vistaDocente">
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-edit"></i> Registro de Calificaciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Alumno</th>
+                                    <th>Parcial 1</th>
+                                    <th>Parcial 2</th>
+                                    <th>Parcial 3</th>
+                                    <th>Calificación Final</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDocente">
+                                
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
+        </div>
+        <?php endif; ?>
 
         </div>
     </div>
