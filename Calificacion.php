@@ -136,6 +136,24 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
         </div>
     </div>
 
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="modalCalificacionGuardada" tabindex="-1" aria-labelledby="modalCalificacionGuardadaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="modalCalificacionGuardadaLabel"><i class="fas fa-check-circle"></i> Calificación Guardada</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+            La calificación ha sido registrada con éxito.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="Interfaz/js/script.js"></script>
 </body>

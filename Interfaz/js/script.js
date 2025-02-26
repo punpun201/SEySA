@@ -8,13 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const tablaAlumno = document.getElementById("tablaAlumno");
     const usuarioTipo = document.body.getAttribute("data-usuario"); 
 
-    // Manejo del sidebar
     toggleSidebar.addEventListener("click", function () {
         sidebar.classList.toggle("collapsed");
         content.classList.toggle("collapsed");
     });
 
-    // Carga los períodos automáticamente
     fetch("Funcionamiento/obtener_periodos.php")
         .then(response => response.json())
         .then(data => {
@@ -25,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error cargando períodos:", error));
 
-    // Generar opciones de calificación (1 a 10)
     function generarOpcionesCalificacion(seleccionado) {
         let options = `<option value="">Selecciona</option>`;
         for (let i = 1; i <= 10; i++) {
@@ -35,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return options;
     }
 
-    // **DOCENTE**
     if (usuarioTipo === "docente") {
         periodoSelect.addEventListener("change", function () {
             const periodo_id = this.value;
@@ -64,101 +60,47 @@ document.addEventListener("DOMContentLoaded", function () {
             const materia_id = materiaSelect.value;
             const periodo_id = periodoSelect.value;
             if (!materia_id || !periodo_id) return;
-
+        
             fetch("Funcionamiento/obtener_calificaciones_docente.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `materia_id=${materia_id}&periodo_id=${periodo_id}`
             })
             .then(response => response.json())
-            .then(alumnos => {
-                tablaDocente.innerHTML = ""; 
-
-                if (alumnos.length === 0) {
+            .then(data => {
+                tablaDocente.innerHTML = "";
+                if (data.length === 0) {
                     tablaDocente.innerHTML = `<tr><td colspan="6" class="text-center">No hay alumnos inscritos en esta materia</td></tr>`;
                     return;
                 }
-
-                alumnos.forEach(alumno => {
+                data.forEach(alumno => {
                     tablaDocente.innerHTML += `
                         <tr data-id="${alumno.id}">
                             <td>${alumno.nombre}</td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_1)}</select></td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
+                            <td><select class="form-select calificacion" data-parcial="1">${generarOpcionesCalificacion(alumno.parcial_1)}</select></td>
+                            <td><select class="form-select calificacion" data-parcial="2">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
+                            <td><select class="form-select calificacion" data-parcial="3">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
                             <td>${alumno.calificacion_final ?? 'Pendiente'}</td>
-                            <td>
-                                <button class="btn btn-sm btn-success guardar-calificacion">
-                                    <i class="fas fa-save"></i> Guardar
-                                </button>
-                                <button class="btn btn-sm btn-warning editar-calificacion">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+                            <td><button class="btn btn-sm btn-success guardar-calificacion"><i class="fas fa-save"></i> Guardar</button></td>
+                        </tr>`;
                 });
             })
             .catch(error => console.error("Error cargando alumnos y calificaciones:", error));
         }
 
-        // Cuando el docente selecciona una materia, cargar los alumnos
-        materiaSelect.addEventListener("change", function () {
-            const materia_id = this.value;
-            const periodo_id = periodoSelect.value;
-            if (!materia_id || !periodo_id) return;
+        materiaSelect.addEventListener("change", cargarAlumnosYCalificaciones);
 
-            fetch("Funcionamiento/obtener_alumnos.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `materia_id=${materia_id}&periodo_id=${periodo_id}`
-            })
-            .then(response => response.json())
-            .then(alumnos => {
-                tablaDocente.innerHTML = ""; // Limpiar tabla antes de llenarla
-
-                if (alumnos.length === 0) {
-                    tablaDocente.innerHTML = `<tr><td colspan="6" class="text-center">No hay alumnos inscritos en esta materia</td></tr>`;
-                    return;
-                }
-
-                alumnos.forEach(alumno => {
-                    tablaDocente.innerHTML += `
-                        <tr data-id="${alumno.id}">
-                            <td>${alumno.nombre}</td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_1)}</select></td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
-                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
-                            <td>${alumno.calificacion_final ?? 'Pendiente'}</td>
-                            <td>
-                                <button class="btn btn-sm btn-success guardar-calificacion">
-                                    <i class="fas fa-save"></i> Guardar
-                                </button>
-                                <button class="btn btn-sm btn-warning editar-calificacion">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            })
-            .catch(error => console.error("Error cargando alumnos:", error));
-        });
-
-        // Evento de guardar calificaciones
         document.addEventListener("click", function (event) {
             if (event.target.classList.contains("guardar-calificacion")) {
                 const fila = event.target.closest("tr");
                 const alumno_id = fila.getAttribute("data-id");
                 const parciales = fila.querySelectorAll(".calificacion");
         
-                const parcial_1 = parciales[0].value || null;
-                const parcial_2 = parciales[1].value || null;
-                const parcial_3 = parciales[2].value || null;
+                const parcial_1 = parciales[0].value || parciales[0].getAttribute("data-valor") || null;
+                const parcial_2 = parciales[1].value || parciales[1].getAttribute("data-valor") || null;
+                const parcial_3 = parciales[2].value || parciales[2].getAttribute("data-valor") || null;
                 const materia_id = materiaSelect.value;
                 const periodo_id = periodoSelect.value;
-        
-                console.log("Enviando datos:", { alumno_id, materia_id, periodo_id, parcial_1, parcial_2, parcial_3 });
         
                 fetch("Funcionamiento/guardar_calificaciones.php", {
                     method: "POST",
@@ -168,7 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert("Calificación guardada correctamente");
+                        let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
+                        modal.show();
+                        cargarAlumnosYCalificaciones();
                     } else {
                         alert("Error al guardar la calificación: " + data.message);
                     }
@@ -176,14 +120,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(error => console.error("Error al guardar calificación:", error));
             }
         });
-    }        
+    }
 
-    // **ALUMNO**
     if (usuarioTipo === "alumno") {
         periodoSelect.addEventListener("change", function () {
             const periodo_id = this.value;
             if (!periodo_id) return;
-
+    
             fetch("Funcionamiento/obtener_calificaciones_alumno.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -191,14 +134,18 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .then(data => {
+                console.log("Respuesta del servidor:", data); // <-- Muestra los datos en la consola
                 tablaAlumno.innerHTML = ""; 
-
+    
                 if (data.length === 0) {
+                    console.warn("No hay calificaciones registradas.");
                     tablaAlumno.innerHTML = `<tr><td colspan="5" class="text-center">No hay calificaciones registradas.</td></tr>`;
                     return;
                 }
-
+    
                 data.forEach(calificacion => {
+                    console.log(`Procesando: ${calificacion.materia} - P1: ${calificacion.parcial_1}, P2: ${calificacion.parcial_2}, P3: ${calificacion.parcial_3}`);
+    
                     tablaAlumno.innerHTML += `
                         <tr>
                             <td>${calificacion.materia}</td>
@@ -206,11 +153,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             <td>${calificacion.parcial_2 ?? 'Pendiente'}</td>
                             <td>${calificacion.parcial_3 ?? 'Pendiente'}</td>
                             <td>${calificacion.calificacion_final ?? 'Pendiente'}</td>
-                        </tr>
-                    `;
+                        </tr>`;
                 });
             })
             .catch(error => console.error("Error cargando calificaciones del alumno:", error));
         });
-    }
+    }    
 });
