@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return options;
     }
 
+    // DOCENTES
     if (usuarioTipo === "docente") {
         periodoSelect.addEventListener("change", function () {
             const periodo_id = this.value;
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error cargando materias:", error));
         });
 
+        // Obtener calificaciones 
         function cargarAlumnosYCalificaciones() {
             const materia_id = materiaSelect.value;
             const periodo_id = periodoSelect.value;
@@ -77,19 +79,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     tablaDocente.innerHTML += `
                         <tr data-id="${alumno.id}">
                             <td>${alumno.nombre}</td>
-                            <td><select class="form-select calificacion" data-parcial="1">${generarOpcionesCalificacion(alumno.parcial_1)}</select></td>
-                            <td><select class="form-select calificacion" data-parcial="2">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
-                            <td><select class="form-select calificacion" data-parcial="3">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
+                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_1)}</select></td>
+                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
+                            <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
                             <td>${alumno.calificacion_final ?? 'Pendiente'}</td>
-                            <td><button class="btn btn-sm btn-success guardar-calificacion"><i class="fas fa-save"></i> Guardar</button></td>
+                            <td>
+                                <button class="btn btn-sm btn-success guardar-calificacion"><i class="fas fa-save"></i> Guardar</button>
+                            </td>
                         </tr>`;
-                });
+                });                
             })
             .catch(error => console.error("Error cargando alumnos y calificaciones:", error));
         }
 
         materiaSelect.addEventListener("change", cargarAlumnosYCalificaciones);
 
+        // Guardar calificaciones 
         document.addEventListener("click", function (event) {
             if (event.target.classList.contains("guardar-calificacion")) {
                 const fila = event.target.closest("tr");
@@ -112,6 +117,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (data.success) {
                         let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
                         modal.show();
+        
+                        // ✅ **Ahora se calculará la calificación final**
+                        calcularCalificacionFinal(alumno_id, materia_id, periodo_id, fila);
+        
+                        // ✅ Recargar datos de calificaciones
                         cargarAlumnosYCalificaciones();
                     } else {
                         alert("Error al guardar la calificación: " + data.message);
@@ -120,8 +130,75 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(error => console.error("Error al guardar calificación:", error));
             }
         });
+        
+        // 🔹 **Nueva función para calcular la calificación final**
+        function calcularCalificacionFinal(alumno_id, materia_id, periodo_id, fila) {
+            fetch("Funcionamiento/calificacion_final.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `alumno_id=${alumno_id}&materia_id=${materia_id}&periodo_id=${periodo_id}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Respuesta de calificación final:", data);
+                if (data.success) {
+                    fila.querySelector("td:nth-child(5)").textContent = data.calificacion_final; // Actualiza la vista con la calificación final
+                } else {
+                    console.warn("Error al calcular calificación final:", data.error);
+                }
+            })
+            .catch(error => console.error("Error al calcular calificación final:", error));
+        }
     }
-
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        let comentarioAlumnoId = null;
+    
+        // Evento para abrir el modal y cargar el comentario del alumno
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("comentario-alumno")) {
+                comentarioAlumnoId = event.target.getAttribute("data-id");
+                const nombreAlumno = event.target.getAttribute("data-nombre");
+                document.getElementById("comentarioAlumnoNombre").textContent = nombreAlumno;
+    
+                // Obtener el comentario guardado
+                fetch("Funcionamiento/obtener_comentario.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `alumno_id=${comentarioAlumnoId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("comentarioTexto").value = data.comentario || "";
+                    new bootstrap.Modal(document.getElementById("modalComentarios")).show();
+                })
+                .catch(error => console.error("Error al obtener comentario:", error));
+            }
+        });
+    
+        // Guardar comentario en la base de datos
+        document.getElementById("guardarComentario").addEventListener("click", function () {
+            const comentarioTexto = document.getElementById("comentarioTexto").value;
+    
+            fetch("Funcionamiento/guardar_comentario.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `alumno_id=${comentarioAlumnoId}&comentario=${encodeURIComponent(comentarioTexto)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Comentario guardado correctamente");
+                    bootstrap.Modal.getInstance(document.getElementById("modalComentarios")).hide();
+                } else {
+                    alert("Error al guardar comentario");
+                }
+            })
+            .catch(error => console.error("Error al guardar comentario:", error));
+        });
+    });
+    
+    // ALUMNOS
     if (usuarioTipo === "alumno") {
         periodoSelect.addEventListener("change", function () {
             const periodo_id = this.value;
@@ -134,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Respuesta del servidor:", data); // <-- Muestra los datos en la consola
+                console.log("Respuesta del servidor:", data); 
                 tablaAlumno.innerHTML = ""; 
     
                 if (data.length === 0) {
