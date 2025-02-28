@@ -83,9 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
                             <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_2)}</select></td>
                             <td><select class="form-select calificacion">${generarOpcionesCalificacion(alumno.parcial_3)}</select></td>
                             <td>${alumno.calificacion_final ?? 'Pendiente'}</td>
-                            <td>
-                                <button class="btn btn-sm btn-success guardar-calificacion"><i class="fas fa-save"></i> Guardar</button>
-                            </td>
                         </tr>`;
                 });                
             })
@@ -94,45 +91,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
         materiaSelect.addEventListener("change", cargarAlumnosYCalificaciones);
 
-        // Guardar calificaciones 
-        document.addEventListener("click", function (event) {
-            if (event.target.classList.contains("guardar-calificacion")) {
-                const fila = event.target.closest("tr");
+        document.getElementById("guardarTodasCalificaciones").addEventListener("click", function () {
+            const filas = document.querySelectorAll("#tablaDocente tr");
+            let datos = [];
+        
+            filas.forEach(fila => {
                 const alumno_id = fila.getAttribute("data-id");
                 const parciales = fila.querySelectorAll(".calificacion");
         
-                const parcial_1 = parciales[0].value || parciales[0].getAttribute("data-valor") || null;
-                const parcial_2 = parciales[1].value || parciales[1].getAttribute("data-valor") || null;
-                const parcial_3 = parciales[2].value || parciales[2].getAttribute("data-valor") || null;
-                const materia_id = materiaSelect.value;
-                const periodo_id = periodoSelect.value;
+                const parcial_1 = parciales[0].value || null;
+                const parcial_2 = parciales[1].value || null;
+                const parcial_3 = parciales[2].value || null;
         
-                fetch("Funcionamiento/guardar_calificaciones.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `alumno_id=${alumno_id}&materia_id=${materia_id}&periodo_id=${periodo_id}&parcial_1=${parcial_1}&parcial_2=${parcial_2}&parcial_3=${parcial_3}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
-                        modal.show();
+                datos.push({
+                    alumno_id,
+                    parcial_1,
+                    parcial_2,
+                    parcial_3
+                });
+            });
         
-                        // ✅ **Ahora se calculará la calificación final**
-                        calcularCalificacionFinal(alumno_id, materia_id, periodo_id, fila);
+            const materia_id = materiaSelect.value;
+            const periodo_id = periodoSelect.value;
         
-                        // ✅ Recargar datos de calificaciones
-                        cargarAlumnosYCalificaciones();
-                    } else {
-                        alert("Error al guardar la calificación: " + data.message);
-                    }
-                })
-                .catch(error => console.error("Error al guardar calificación:", error));
-            }
+            fetch("Funcionamiento/guardar_calificaciones.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ materia_id, periodo_id, calificaciones: datos })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
+                    modal.show();
+        
+                    // 🔹 **Calcular calificación final para cada alumno**
+                    datos.forEach(alumno => {
+                        calcularCalificacionFinal(alumno.alumno_id, materia_id, periodo_id);
+                    });
+        
+                    // 🔹 **Recargar las calificaciones**
+                    cargarAlumnosYCalificaciones();
+                } else {
+                    alert("Error al guardar las calificaciones: " + data.message);
+                }
+            })
+            .catch(error => console.error("Error al guardar calificaciones:", error));
         });
-        
-        // 🔹 **Nueva función para calcular la calificación final**
-        function calcularCalificacionFinal(alumno_id, materia_id, periodo_id, fila) {
+                
+        // Función para calcular la calificación final
+        function calcularCalificacionFinal(alumno_id, materia_id, periodo_id) {
             fetch("Funcionamiento/calificacion_final.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -142,13 +150,17 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("Respuesta de calificación final:", data);
                 if (data.success) {
-                    fila.querySelector("td:nth-child(5)").textContent = data.calificacion_final; // Actualiza la vista con la calificación final
+                    // 🔹 **Actualizar la vista**
+                    const fila = document.querySelector(`tr[data-id='${alumno_id}']`);
+                    if (fila) {
+                        fila.querySelector("td:nth-child(5)").textContent = data.calificacion_final;
+                    }
                 } else {
                     console.warn("Error al calcular calificación final:", data.error);
                 }
             })
             .catch(error => console.error("Error al calcular calificación final:", error));
-        }
+        }        
     }
     
     document.addEventListener("DOMContentLoaded", function () {

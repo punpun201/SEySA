@@ -13,7 +13,7 @@
     <div class="formulario">
         <form method="post" action="Funcionamiento/login.php" class="inicio" onsubmit="return validarFormulario()"> 
         <div class="logo-container">
-                <img src="Interfaz/img/crypto.png" alt="Logo del sistema" class="logo">
+                <img src="Interfaz/img/transparencia.png" alt="Logo del sistema" class="logo">
         </div>
             <h1>Iniciar sesión</h1>
             <div id="usuario" class="usuario">
