@@ -90,51 +90,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* Contenido Principal */
-.content {
-    margin-top: 60px;
-    margin-left: 230px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-    width: calc(100% - 230px);
-}
-
-.content.collapsed {
-    margin-left: 70px;
-    width: calc(100% - 70px);
-}
-
-/* Ajustes Responsivos */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 70px;
-    }
-    .content {
-        margin-left: 70px;
-        width: calc(100% - 70px);
-    }
-}
-
-/* Tarjetas */
-.info-card {
-    background: white;
-    padding: 25px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    font-size: 18px;
-}
-
-.info-card i {
-    font-size: 44px;
-    color: #406E8E;
-}
-
-.info-card:hover {
-    transform: translateY(-5px);
-}
-
 /* Botones */
 .btn {
     font-size: 18px;
@@ -167,52 +122,56 @@ body {
     color: #E57373;
 }
 
-/* Asegurar margen entre tarjetas */
-.card {
-    border-radius: 10px;
+/* Ajustes específicos para la pantalla de generación de usuario */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Espacio entre la tabla */
-.table {
-    margin-bottom: 0;
-}
-
-/* Botón más atractivo */
-.btn-primary, .btn-success, .btn-info {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-/* Estilo de cabeceras */
-.card-header {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-/* Hacer que las tablas sean más visibles */
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-#guardarCalificaciones {
-    font-size: 14px; 
-    padding: 6px 15px; 
-    width: auto; 
-    display: block;
-    margin: 10px auto; 
-}
-
-.selectores-container {
+form {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 15px;
 }
 
-.selectores-container .selector-box {
-    flex: 1; 
-    max-width: 48%; 
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-primary, .btn-success, .btn-info {
+    font-size: 16px;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.nav-tabs .nav-link {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.tab-content {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 15px;
+    }
 }

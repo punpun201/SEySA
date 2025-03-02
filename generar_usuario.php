@@ -11,7 +11,6 @@ $es_docente = in_array("Docente", $_SESSION['roles']);
 $es_alumno = in_array("Alumno", $_SESSION['roles']);
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,7 +20,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Interfaz/css/style2.css">
+    <link rel="stylesheet" href="Interfaz/css/style3.css">
 </head>
 <body>
 
@@ -82,6 +81,26 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                             <input type="text" class="form-control" id="nombreAlumno" readonly>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Teléfono:</label>
+                            <input type="text" class="form-control" id="telefonoAlumno" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">CURP:</label>
+                            <input type="text" class="form-control" id="curpAlumno" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Domicilio:</label>
+                            <input type="text" class="form-control" id="domicilioAlumno" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Certificado Preparatoria:</label>
+                            <input type="text" class="form-control" id="certificadoAlumno" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Comprobante de Pago:</label>
+                            <input type="text" class="form-control" id="comprobanteAlumno" readonly>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">Usuario:</label>
                             <input type="text" class="form-control" id="usuarioAlumno" readonly>
                         </div>
@@ -107,6 +126,14 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                         <div class="mb-3">
                             <label class="form-label">Nombre:</label>
                             <input type="text" class="form-control" id="nombreDocente" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono:</label>
+                            <input type="text" class="form-control" id="telefonoDocente" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">RFC:</label>
+                            <input type="text" class="form-control" id="rfcDocente" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Usuario:</label>
