@@ -195,11 +195,11 @@ body {
 }
 
 #guardarCalificaciones {
-    font-size: 14px; /* Tamaño de fuente más pequeño */
-    padding: 6px 15px; /* Ajusta el padding */
-    width: auto; /* Ajusta el ancho automáticamente */
+    font-size: 14px; 
+    padding: 6px 15px; 
+    width: auto; 
     display: block;
-    margin: 10px auto; /* Centra el botón */
+    margin: 10px auto; 
 }
 
 .selectores-container {
@@ -209,10 +209,64 @@ body {
 }
 
 .selectores-container .selector-box {
-    flex: 1; /* Hace que ambos elementos ocupen el mismo espacio */
-    max-width: 48%; /* Reduce su ancho */
+    flex: 1; 
+    max-width: 48%; 
     background: white;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes específicos para la pantalla de generación de usuario */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-primary, .btn-success, .btn-info {
+    font-size: 16px;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.nav-tabs .nav-link {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.tab-content {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 15px;
+    }
 }

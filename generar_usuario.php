@@ -6,7 +6,9 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 $roles_usuario = $_SESSION['roles'] ?? [];
-$es_admin = in_array("Administrador", (array)$roles_usuario);
+$es_admin = in_array("Administrador", $_SESSION['roles']);
+$es_docente = in_array("Docente", $_SESSION['roles']);
+$es_alumno = in_array("Alumno", $_SESSION['roles']);
 ?>
 
 
@@ -35,10 +37,18 @@ $es_admin = in_array("Administrador", (array)$roles_usuario);
     <div class="sidebar" id="sidebar">
         <ul>
             <li><a href="dashboard.php"><i class="fas fa-home"></i> <span class="text">Inicio</span></a></li>
-            <li><a href="#"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
-            <li><a href="Calificacion.php"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
-            <li><a href="notificacion.php"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
+            <?php if ($es_alumno || $es_docente): ?>
+                <li><a href="#"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
+            <?php endif; ?>
+            <?php if ($es_docente || $es_admin): ?>
+                <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
+            <?php endif; ?>
+            <?php if ($es_alumno || $es_docente): ?>
+                <li><a href="Calificacion.php"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
+            <?php endif; ?>
+            <?php if ($es_alumno || $es_docente): ?>
+                <li><a href="notificacion.php"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
+            <?php endif; ?>
             <?php if ($es_admin): ?>
                 <li><a href="#"><i class="fas fa-cogs"></i> <span class="text">Reportes</span></a></li>
                 <li><a href="generar_usuario.php" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Crear usuario</span></a></li>

@@ -44,3 +44,4 @@ function buscarDocente() {
 function generarPDF(tipo) {
     window.open(`generar_pdf.php?tipo=${tipo}&id=${tipo === 'alumno' ? document.getElementById("idAlumno").value : document.getElementById("idDocente").value}`);
 }
+
