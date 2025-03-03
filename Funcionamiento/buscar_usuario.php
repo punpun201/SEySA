@@ -76,7 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
 
 // Función para generar un nombre de usuario a partir del nombre
 function generarUsuario($nombre) {
-    return strtolower(str_replace(" ", ".", $nombre)) . rand(10, 99);
+    $primeraLetra = strtolower(substr($nombre, 0, 1)); // Obtiene la primera letra del nombre en minúscula
+    $numeroAleatorio = rand(100, 999); // Genera un número aleatorio de 3 dígitos
+    return $primeraLetra . $numeroAleatorio; // Combina ambos valores
 }
 
 // Función para generar una contraseña segura aleatoria

@@ -9,12 +9,19 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+// Función para mostrar el modal con un mensaje
+function mostrarModal(mensaje) {
+    document.getElementById("modalMensaje").innerText = mensaje;
+    let modal = new bootstrap.Modal(document.getElementById("modalNotificacion"));
+    modal.show();
+}
+
 // Función para buscar alumno
 function buscarAlumno() {
     const id = document.getElementById("idAlumno").value.trim();
 
     if (id === "") {
-        alert("Por favor, ingrese un ID de alumno.");
+        mostrarModal("Por favor, ingrese un ID de alumno.");
         return;
     }
 
@@ -22,7 +29,7 @@ function buscarAlumno() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                alert(data.error);
+                mostrarModal(data.error);
             } else if (data.tipo === "alumno") {
                 document.getElementById("nombreAlumno").value = data.nombre;
                 document.getElementById("telefonoAlumno").value = data.telefono;
@@ -32,10 +39,10 @@ function buscarAlumno() {
                 document.getElementById("comprobanteAlumno").value = data.comprobante_pago;
                 document.getElementById("usuarioAlumno").value = data.usuario;
                 document.getElementById("passwordAlumno").value = data.contraseña;
-                
+
                 document.getElementById("datosAlumno").style.display = "block";
             } else {
-                alert("El ID ingresado no corresponde a un alumno.");
+                mostrarModal("El ID ingresado no corresponde a un alumno.");
             }
         })
         .catch(error => console.error("Error en la búsqueda:", error));
@@ -46,7 +53,7 @@ function buscarDocente() {
     const id = document.getElementById("idDocente").value.trim();
 
     if (id === "") {
-        alert("Por favor, ingrese un ID de docente.");
+        mostrarModal("Por favor, ingrese un ID de docente.");
         return;
     }
 
@@ -54,7 +61,7 @@ function buscarDocente() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                alert(data.error);
+                mostrarModal(data.error);
             } else if (data.tipo === "docente") {
                 document.getElementById("nombreDocente").value = data.nombre;
                 document.getElementById("telefonoDocente").value = data.telefono;
@@ -64,7 +71,7 @@ function buscarDocente() {
 
                 document.getElementById("datosDocente").style.display = "block";
             } else {
-                alert("El ID ingresado no corresponde a un docente.");
+                mostrarModal("El ID ingresado no corresponde a un docente.");
             }
         })
         .catch(error => console.error("Error en la búsqueda:", error));
@@ -83,24 +90,27 @@ function generarPDF(tipo) {
 // Función para guardar cuenta
 function guardarCuenta(tipo) {
     const id = tipo === "alumno" ? document.getElementById("idAlumno").value : document.getElementById("idDocente").value;
-    if (id.trim() === "") {
-        alert("Debe buscar un usuario antes de guardar la cuenta.");
+    const usuario = tipo === "alumno" ? document.getElementById("usuarioAlumno").value : document.getElementById("usuarioDocente").value;
+    const contraseña = tipo === "alumno" ? document.getElementById("passwordAlumno").value : document.getElementById("passwordDocente").value;
+
+    if (id.trim() === "" || usuario.trim() === "" || contraseña.trim() === "") {
+        mostrarModal("Debe buscar un usuario antes de guardar la cuenta.");
         return;
     }
-    
+
     fetch("Funcionamiento/guardar_usuario.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ tipo, id })
+        body: JSON.stringify({ tipo, id, usuario, contraseña }) // Se envían todos los parámetros
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert("Cuenta guardada correctamente.");
+            mostrarModal("Cuenta guardada correctamente.");
         } else {
-            alert("Error al guardar la cuenta: " + data.error);
+            mostrarModal("Error al guardar la cuenta: " + data.error);
         }
     })
     .catch(error => console.error("Error en la solicitud:", error));
