@@ -109,7 +109,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                             <input type="text" class="form-control" id="passwordAlumno" readonly>
                         </div>
                         <button type="button" class="btn btn-success" onclick="guardarCuenta('alumno')">Guardar Cuenta</button>
-                        <button type="button" class="btn btn-info" onclick="generarPDF('alumno')">Generar PDF</button>
+                        <button type="button" class="btn btn-danger text-white" onclick="generarPDF('alumno')">Generar PDF</button>
                     </div>
                 </form>
             </div>

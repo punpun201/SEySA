@@ -84,7 +84,7 @@ function generarPDF(tipo) {
         alert("Primero busque un usuario antes de generar el PDF.");
         return;
     }
-    window.open(`Funcionamiento/generar_pdf.php?tipo=${tipo}&id=${id}`, "_blank");
+    window.open(`Funcionamiento/pdf/generar_pdf.php?tipo=${tipo}&id=${id}`, "_blank");
 }
 
 // Función para guardar cuenta
