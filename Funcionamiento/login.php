@@ -4,7 +4,7 @@ include("../Funcionamiento/db/conexion.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = mysqli_real_escape_string($conexion, $_POST['correo']);
-    $contraseña = mysqli_real_escape_string($conexion, $_POST['contraseña']); // Se usa tal cual sin hashear, por ahora
+    $contraseña = mysqli_real_escape_string($conexion, $_POST['contraseña']); 
 
     // Busca al usuario en la base de datos
     $consulta_usuario = "
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Verifica la contraseña directamente (sin hashear)
+        // Verifica la contraseña directamente 
         if ($contraseña === $fila_usuario['contraseña']) {
             $_SESSION['id_usuario'] = $fila_usuario['id'];
             $_SESSION['nombre'] = $fila_usuario['nombre'];
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['telefono'] = $fila_usuario['telefono'];
             $_SESSION['roles'] = explode(',', $fila_usuario['roles']); // Guarda los roles como array
             
-            header('Location: ../dashboard.php');
+            header('Location: ../view/dashboard.php'); 
             exit();
         } else {
             header('Location: ../index.php?error=Contraseña incorrecta.');

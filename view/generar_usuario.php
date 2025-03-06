@@ -6,9 +6,9 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 $roles_usuario = $_SESSION['roles'] ?? [];
-$es_admin = in_array("Administrador", $_SESSION['roles']);
-$es_docente = in_array("Docente", $_SESSION['roles']);
-$es_alumno = in_array("Alumno", $_SESSION['roles']);
+$es_admin = in_array("Administrador", (array)$roles_usuario);
+$es_docente = in_array("Docente", (array)$roles_usuario);
+$es_alumno = in_array("Alumno", (array)$roles_usuario);
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Interfaz/css/style3.css">
+    <link rel="stylesheet" href="../Interfaz/css/style3.css">
 </head>
 <body>
 
@@ -28,7 +28,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <nav class="navbar">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
-            <a href="Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+            <a href="../Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>
 
@@ -170,6 +170,6 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="Interfaz/js/script3.js"></script>
+    <script src="../Interfaz/js/script3.js"></script>
 </body>
 </html>

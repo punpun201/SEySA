@@ -22,7 +22,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Interfaz/css/style2.css">
+    <link rel="stylesheet" href="../Interfaz/css/style2.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -31,7 +31,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <nav class="navbar">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
-            <a href="Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+            <a href="../Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>
 
@@ -58,8 +58,37 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </ul>
     </div>
 
+    <!-- Contenido Principal -->
+    <div class="content" id="content">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card info-card">
+                        <i class="fas fa-user-graduate"></i>
+                        <h5>Alumnos Registrados</h5>
+                        <p>320</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card info-card">
+                        <i class="fas fa-book"></i>
+                        <h5>Materias Activas</h5>
+                        <p>18</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card info-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h5>Alumnos en Riesgo</h5>
+                        <p>45</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="Interfaz/js/script2.js"></script>
+    <script src="../Interfaz/js/script.js"></script>
 
 </body>
 </html>
