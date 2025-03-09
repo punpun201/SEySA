@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
     $id = mysqli_real_escape_string($conexion, $_GET["id"]);
     $respuesta = [];
 
+    // Busca en la tabla alumnos POR MATRÍCULA
     $query_alumno = "
         SELECT 
             u.id, 
@@ -28,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
         $respuesta = mysqli_fetch_assoc($resultado_alumno);
         $respuesta["tipo"] = "alumno";
 
-        // Si el usuario no tiene cuenta, generar una
+        // Si el usuario no tiene cuenta, generar una basada en el nombre y matrícula
         if (empty($respuesta["usuario"]) || empty($respuesta["contraseña"])) {
-            $respuesta["usuario"] = generarUsuario($respuesta["nombre"]);
+            $respuesta["usuario"] = generarUsuario($respuesta["nombre"], $respuesta["matricula"]);
             $respuesta["contraseña"] = generarContraseña();
         }
 
@@ -38,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
         exit();
     }
 
+    // Busca en la tabla docentes POR MATRÍCULA_DOCENTE
     $query_docente = "
         SELECT 
             u.id, 
@@ -58,9 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
         $respuesta = mysqli_fetch_assoc($resultado_docente);
         $respuesta["tipo"] = "docente";
 
-        // Si el usuario no tiene cuenta, generar una
+        // Si el usuario no tiene cuenta, generar una basada en el nombre y matrícula_docente
         if (empty($respuesta["usuario"]) || empty($respuesta["contraseña"])) {
-            $respuesta["usuario"] = generarUsuario($respuesta["nombre"]);
+            $respuesta["usuario"] = generarUsuario($respuesta["nombre"], $respuesta["matricula_docente"]);
             $respuesta["contraseña"] = generarContraseña();
         }
 
@@ -68,17 +70,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["id"])) {
         exit();
     }
 
-    // Si no se encuentra en ninguna tabla
     echo json_encode(["error" => "Usuario no encontrado"]);
 } else {
     echo json_encode(["error" => "Solicitud inválida"]);
 }
 
-// Función para generar un nombre de usuario a partir del nombre
-function generarUsuario($nombre) {
-    $primeraLetra = strtolower(substr($nombre, 0, 1)); // Obtiene la primera letra del nombre en minúscula
-    $numeroAleatorio = rand(100, 999); // Genera un número aleatorio de 3 dígitos
-    return $primeraLetra . $numeroAleatorio; // Combina ambos valores
+// Función para generar un nombre de usuario basado en el nombre y la matrícula
+function generarUsuario($nombre, $matricula) {
+    $nombre = strtolower(str_replace(" ", ".", trim($nombre))); // Convierte el nombre a minúsculas y reemplaza espacios con puntos
+    return $nombre . "." . $matricula . "@red.seysa.mx"; // Combina el nombre, matrícula y la extensión
 }
 
 // Función para generar una contraseña segura aleatoria

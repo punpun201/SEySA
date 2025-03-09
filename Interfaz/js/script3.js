@@ -9,6 +9,21 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+function togglePassword(inputId) {
+    const passwordField = document.getElementById(inputId);
+    const icon = passwordField.nextElementSibling.querySelector("i");
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+
 // Función para mostrar el modal con un mensaje
 function mostrarModal(mensaje) {
     document.getElementById("modalMensaje").innerText = mensaje;
@@ -25,7 +40,7 @@ function buscarAlumno() {
         return;
     }
 
-    fetch(`Funcionamiento/buscar_usuario.php?id=${id}`)
+    fetch(`../Funcionamiento/buscar_usuario.php?id=${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -57,7 +72,7 @@ function buscarDocente() {
         return;
     }
 
-    fetch(`Funcionamiento/buscar_usuario.php?id=${id}`)
+    fetch(`../Funcionamiento/buscar_usuario.php?id=${id}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -84,7 +99,7 @@ function generarPDF(tipo) {
         alert("Primero busque un usuario antes de generar el PDF.");
         return;
     }
-    window.open(`Funcionamiento/pdf/generar_pdf.php?tipo=${tipo}&id=${id}`, "_blank");
+    window.open(`../Funcionamiento/pdf/generar_pdf.php?tipo=${tipo}&id=${id}`, "_blank");
 }
 
 // Función para guardar cuenta
@@ -98,7 +113,7 @@ function guardarCuenta(tipo) {
         return;
     }
 
-    fetch("Funcionamiento/guardar_usuario.php", {
+    fetch("../Funcionamiento/guardar_usuario.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         content.classList.toggle("collapsed");
     });
 
-    fetch("Funcionamiento/obtener_periodos.php")
+    fetch("../Funcionamiento/obtener_periodos.php")
         .then(response => response.json())
         .then(data => {
             periodoSelect.innerHTML = '<option value="">Selecciona un período</option>';
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const periodo_id = this.value;
             if (!periodo_id) return;
 
-            fetch("Funcionamiento/obtener_materias_profesor.php", {
+            fetch("../Funcionamiento/obtener_materias_profesor.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `periodo_id=${encodeURIComponent(periodo_id)}`
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const periodo_id = periodoSelect.value;
             if (!materia_id || !periodo_id) return;
         
-            fetch("Funcionamiento/obtener_calificaciones_docente.php", {
+            fetch("../Funcionamiento/obtener_calificaciones_docente.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `materia_id=${materia_id}&periodo_id=${periodo_id}`
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const materia_id = materiaSelect.value;
             const periodo_id = periodoSelect.value;
         
-            fetch("Funcionamiento/guardar_calificaciones.php", {
+            fetch("../Funcionamiento/guardar_calificaciones.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ materia_id, periodo_id, calificaciones: datos })
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
         // Función para calcular la calificación final
         function calcularCalificacionFinal(alumno_id, materia_id, periodo_id) {
-            fetch("Funcionamiento/calificacion_final.php", {
+            fetch("../Funcionamiento/calificacion_final.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `alumno_id=${alumno_id}&materia_id=${materia_id}&periodo_id=${periodo_id}`
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("guardarComentario").addEventListener("click", function () {
             const comentarioTexto = document.getElementById("comentarioTexto").value;
     
-            fetch("Funcionamiento/guardar_comentario.php", {
+            fetch("../Funcionamiento/guardar_comentario.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `alumno_id=${comentarioAlumnoId}&comentario=${encodeURIComponent(comentarioTexto)}`
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const periodo_id = this.value;
             if (!periodo_id) return;
     
-            fetch("Funcionamiento/obtener_calificaciones_alumno.php", {
+            fetch("../Funcionamiento/obtener_calificaciones_alumno.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `periodo_id=${encodeURIComponent(periodo_id)}`

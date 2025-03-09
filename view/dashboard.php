@@ -31,6 +31,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <nav class="navbar">
         <button class="toggle-btn" id="toggleSidebar"><i class="fas fa-bars"></i></button>
         <div class="profile">
+            <a href="cuenta.php" class="account-btn"><i class="fas fa-user"></i> Mi Cuenta</a>
             <a href="../Funcionamiento/db/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
         </div>
     </nav>

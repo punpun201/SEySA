@@ -13,12 +13,12 @@
     <div class="formulario">
         <form method="post" action="Funcionamiento/login.php" class="inicio" onsubmit="return validarFormulario()"> 
         <div class="logo-container">
-                <img src="Interfaz/img/transparencia.png" alt="Logo del sistema" class="logo">
+                <img src="Interfaz/img/mi-espacio.png" alt="Logo del sistema" class="logo">
         </div>
             <h1>Iniciar sesión</h1>
             <div id="usuario" class="usuario">
                 <input type="text" id="usuarioInput" name="correo" required> 
-                <label for="usuario">Matrícula</label>
+                <label for="usuario">Correo</label>
             </div>
             <div id="contraseña" class="contraseña">
                 <input type="password" id="contraseñaInput" name="contraseña" required> 
