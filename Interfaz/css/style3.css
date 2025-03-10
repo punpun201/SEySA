@@ -105,6 +105,22 @@ body {
     color: #406E8E;
 }
 
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+.account-btn {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.account-btn:hover {
+    color: #73dbe5;
+}
+
 /* Botón de Cerrar Sesión */
 .logout-btn {
     text-decoration: none;

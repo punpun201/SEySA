@@ -216,3 +216,19 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+.account-btn {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.account-btn:hover {
+    color: #73dbe5;
+}
