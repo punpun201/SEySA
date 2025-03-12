@@ -1,73 +1,31 @@
 <?php
 include("../Funcionamiento/db/conexion.php");
 
-$alumno_id = $_POST['alumno_id'] ?? null;
-$materia_id = $_POST['materia_id'] ?? null;
-$periodo_id = $_POST['periodo_id'] ?? null;
+// Obtener todas las calificaciones donde los tres parciales tienen valores
+$query = "SELECT id, parcial_1, parcial_2, parcial_3 FROM calificaciones 
+          WHERE parcial_1 IS NOT NULL AND parcial_2 IS NOT NULL AND parcial_3 IS NOT NULL";
+$result = mysqli_query($conexion, $query);
 
-if (!$alumno_id || !$materia_id || !$periodo_id) {
-    echo json_encode(["error" => "Datos incompletos"]);
-    exit();
+if (!$result) {
+    die("Error en la consulta: " . mysqli_error($conexion));
 }
 
-// Obtener el ID de inscripción asegurando el periodo
-$sql = "SELECT i.id 
-        FROM inscripciones i
-        JOIN grupos g ON i.grupo_id = g.id
-        WHERE i.alumno_id = ? AND g.materia_id = ? AND g.periodo_id = ?
-        LIMIT 1";
+while ($row = mysqli_fetch_assoc($result)) {
+    $calificacion_id = $row['id'];
+    $parcial_1 = (float)$row['parcial_1'];
+    $parcial_2 = (float)$row['parcial_2'];
+    $parcial_3 = (float)$row['parcial_3'];
 
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param("iii", $alumno_id, $materia_id, $periodo_id);
-$stmt->execute();
-$result = $stmt->get_result();
+    // Calcular la calificación final solo si los tres parciales tienen valores
+    $calificacion_final = round(($parcial_1 + $parcial_2 + $parcial_3) / 3, 2);
 
-if ($row = $result->fetch_assoc()) {
-    $inscripcion_id = $row['id'];
-} else {
-    echo json_encode(["error" => "No se encontró la inscripción del alumno en la materia y período seleccionados"]);
-    exit();
-}
-$stmt->close();
-
-// Obtener las calificaciones asegurando que no sean NULL
-$sql = "SELECT 
-            COALESCE(parcial_1, 0) AS parcial_1, 
-            COALESCE(parcial_2, 0) AS parcial_2, 
-            COALESCE(parcial_3, 0) AS parcial_3 
-        FROM calificaciones 
-        WHERE inscripcion_id = ?
-        LIMIT 1";
-
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param("i", $inscripcion_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($row = $result->fetch_assoc()) {
-    $parcial_1 = $row['parcial_1'];
-    $parcial_2 = $row['parcial_2'];
-    $parcial_3 = $row['parcial_3'];
-
-    // Calcular calificación final
-    $calificacion_final = ($parcial_1 * 0.30) + ($parcial_2 * 0.30) + ($parcial_3 * 0.40);
-    $calificacion_final = round($calificacion_final, 2); 
-
-    // Actualizar la calificación final en la BD
-    $update_sql = "UPDATE calificaciones SET calificacion_final = ? WHERE inscripcion_id = ?";
-    $update_stmt = $conexion->prepare($update_sql);
-    $update_stmt->bind_param("di", $calificacion_final, $inscripcion_id);
-
-    if ($update_stmt->execute()) {
-        echo json_encode(["success" => true, "calificacion_final" => $calificacion_final]);
-    } else {
-        echo json_encode(["error" => "Error al actualizar la calificación final"]);
-    }
-
-    $update_stmt->close();
-} else {
-    echo json_encode(["error" => "No se encontraron calificaciones para el alumno"]);
+    // Actualizar la calificación final en la base de datos
+    $update_query = "UPDATE calificaciones SET calificacion_final = ? WHERE id = ?";
+    $stmt = mysqli_prepare($conexion, $update_query);
+    mysqli_stmt_bind_param($stmt, "di", $calificacion_final, $calificacion_id);
+    mysqli_stmt_execute($stmt);
 }
 
-$stmt->close();
-$conexion->close();
+mysqli_close($conexion);
+
+echo "Cálculo de calificaciones finales actualizado correctamente.";

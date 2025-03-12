@@ -54,7 +54,7 @@ foreach ($calificaciones as $calificacion) {
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("iiii", $parcial_1, $parcial_2, $parcial_3, $inscripcion_id);
     } else {
-        // Inserta nueva calificación
+        // Inserta una nueva calificación
         $sql = "INSERT INTO calificaciones (inscripcion_id, parcial_1, parcial_2, parcial_3) 
                 VALUES (?, ?, ?, ?)";
         $stmt = $conexion->prepare($sql);
@@ -64,7 +64,6 @@ foreach ($calificaciones as $calificacion) {
     $stmt->execute();
 }
 
-// Confirmar éxito
 echo json_encode(["success" => true]);
 
 $conexion->close();

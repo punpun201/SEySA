@@ -138,7 +138,23 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Error al guardar calificaciones:", error));
         });
-                
+
+        function generarNotificaciones(alumno_id) {
+            fetch("../Funcionamiento/generar_notificaciones.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `alumno_id=${alumno_id}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Notificaciones generadas:", data);
+                if (!data.success) {
+                    console.warn("Error al generar notificaciones:", data.error);
+                }
+            })
+            .catch(error => console.error("Error al generar notificaciones:", error));
+        }
+       
         // Función para calcular la calificación final
         function calcularCalificacionFinal(alumno_id, materia_id, periodo_id) {
             fetch("../Funcionamiento/calificacion_final.php", {
@@ -150,19 +166,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("Respuesta de calificación final:", data);
                 if (data.success) {
-                    // 🔹 **Actualizar la vista**
                     const fila = document.querySelector(`tr[data-id='${alumno_id}']`);
                     if (fila) {
                         fila.querySelector("td:nth-child(5)").textContent = data.calificacion_final;
                     }
+                    // 🔹 **Ejecutar la generación de notificaciones SOLO después de actualizar la calificación final**
+                    return generarNotificaciones(alumno_id);
                 } else {
                     console.warn("Error al calcular calificación final:", data.error);
                 }
             })
             .catch(error => console.error("Error al calcular calificación final:", error));
-        }        
+        }                        
     }
-    
+     
     document.addEventListener("DOMContentLoaded", function () {
         let comentarioAlumnoId = null;
     
