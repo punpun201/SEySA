@@ -3,19 +3,19 @@ include("../Funcionamiento/db/conexion.php");
 
 session_start();
 
-if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['rol'])) {
+if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['roles'])) {
     echo json_encode(["error" => "Usuario no autenticado"]);
     exit();
 }
 
-$usuario_id = $_SESSION['usuario_id'];
-$rol = $_SESSION['rol']; 
+$usuario_id = $_SESSION['id_usuario']; 
+$roles = $_SESSION['roles']; 
 
 $query = "";
 
-if ($rol == "alumno") {
+if (in_array("Alumno", $roles)) {
     $query = "SELECT id, mensaje, tipo, leido FROM notificaciones WHERE usuario_id = ?";
-} elseif ($rol == "docente") {
+} elseif (in_array("Docente", $roles)) {
     $query = "SELECT id, mensaje, tipo, leido FROM notificaciones WHERE usuario_id = ? AND tipo = 'riesgo'";
 } else {
     echo json_encode(["error" => "Rol no válido"]);

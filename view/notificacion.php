@@ -24,7 +24,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Interfaz/css/style2.css">
+    <link rel="stylesheet" href="../Interfaz/css/style4.css">
 </head>
 <body>
 
@@ -60,15 +60,31 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </ul>
     </div>
 
-    <!-- Contenido de Notificaciones -->
-    <div class="container container-notificaciones">
+    <!-- Contenedor de notificaciones -->
+    <div class="notificaciones">
         <h2 class="titulo-notificaciones">Notificaciones</h2>
-        <div id="notificacionesDiv"class="notificaciones-container">
+        <button id="marcarTodasLeidas" class="btn-marcar-todo">
+            <i class="fas fa-check-double"></i> Marcar todas como leídas
+        </button>
+
+        <div id="notificacionesDiv" class="notificaciones-container">
             <p>Cargando notificaciones...</p>
         </div>
     </div>
 
+    <!-- Modal de confirmación -->
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-contenido">
+            <h3 id="mensajeConfirmacion"></h3>
+            <div class="modal-botones">
+                <button id="confirmarAccion" class="btn-confirmar">Confirmar</button>
+                <button id="cancelarAccion" class="btn-cancelar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Interfaz/js/script2.js"></script>
 </body>
 </html>

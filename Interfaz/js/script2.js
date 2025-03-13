@@ -3,89 +3,100 @@ document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("sidebar");
     const content = document.getElementById("content");
     const notificacionesDiv = document.getElementById("notificacionesDiv");
+    const btnMarcarTodas = document.getElementById("marcarTodasLeidas");
 
     toggleSidebar.addEventListener("click", function () {
         sidebar.classList.toggle("collapsed");
         content.classList.toggle("collapsed");
     });
-
+    
     // Función para cargar notificaciones
     function cargarNotificaciones() {
-        console.log("Cargando notificaciones..."); // Debug
-
-        fetch("../Funcionamiento/obtener_notificaciones.php")
+        fetch('../Funcionamiento/obtener_notificaciones.php')
             .then(response => response.json())
             .then(data => {
-                console.log("Datos recibidos:", data); // Debug
+                notificacionesDiv.innerHTML = ""; // Limpiar contenido
 
-                if (!notificacionesDiv) {
-                    console.error("Elemento de notificaciones no encontrado.");
+                if (!data || data.length === 0) {
+                    notificacionesDiv.innerHTML = "<p>No tienes notificaciones.</p>";
                     return;
                 }
 
-                notificacionesDiv.innerHTML = ""; // Limpiar el contenido anterior
-
-                if (!Array.isArray(data)) {
-                    console.error("Respuesta inesperada:", data);
-                    notificacionesDiv.innerHTML = "<p>Error al obtener notificaciones.</p>";
-                    return;
-                }
-
-                if (data.length === 0) {
-                    notificacionesDiv.innerHTML = "<p>No tienes nuevas notificaciones.</p>";
-                    return;
-                }
-
-                // Mostrar notificaciones
-                data.forEach(notificacion => {
-                    const notifItem = document.createElement("div");
-                    notifItem.classList.add("notificacion-item");
-
-                    notifItem.innerHTML = `
-                        <p>${notificacion.mensaje} (${notificacion.tipo})</p>
-                        <button class="marcar-leido" data-id="${notificacion.id}">Marcar como leído</button>
+                data.forEach(noti => {
+                    let notificacionHTML = `
+                        <div class="notificacion ${noti.leido ? 'leida' : ''}" data-id="${noti.id}">
+                            <p>${noti.mensaje}</p>
+                            <button class="marcar-leida" data-id="${noti.id}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </div>
                     `;
-
-                    notificacionesDiv.appendChild(notifItem);
+                    notificacionesDiv.innerHTML += notificacionHTML;
                 });
 
-                // Agregar eventos a los botones de marcar como leído
-                document.querySelectorAll(".marcar-leido").forEach(button => {
+                // Agregar eventos a los botones de "marcar como leída"
+                document.querySelectorAll(".marcar-leida").forEach(button => {
                     button.addEventListener("click", function () {
-                        const notifId = this.getAttribute("data-id");
-                        marcarNotificacionLeida(notifId);
+                        let idNotificacion = this.getAttribute("data-id");
+                        mostrarModal("¿Marcar esta notificación como leída?", () => {
+                            marcarLeida(idNotificacion);
+                        });
                     });
                 });
             })
-            .catch(error => {
-                console.error("Error al obtener notificaciones:", error);
-                notificacionesDiv.innerHTML = "<p>Error al obtener notificaciones.</p>";
-            });
+            .catch(error => console.error("Error al obtener notificaciones:", error));
     }
 
-    // Función para marcar notificación como leída
-    function marcarNotificacionLeida(id) {
-        fetch("../Funcionamiento/marcar_notificacion.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log(`Notificación ${id} marcada como leída.`);
-                cargarNotificaciones();
-            } else {
-                console.error("Error al marcar como leído:", data.error);
+    function marcarLeida(id) {
+        fetch('../Funcionamiento/marcar_leida.php', {
+            method: 'POST',
+            body: new URLSearchParams({ id: id })
+        }).then(() => {
+            let notificacion = document.querySelector(`.notificacion[data-id='${id}']`);
+            if (notificacion) {
+                notificacion.style.opacity = "0.3";
             }
-        })
-        .catch(error => {
-            console.error("Error en la petición:", error);
         });
     }
 
-    // Cargar notificaciones al inicio
-    if (notificacionesDiv) {
-        cargarNotificaciones();
+    // Botón antes de asignar el evento
+    if (btnMarcarTodas) {
+        btnMarcarTodas.addEventListener("click", function () {
+            mostrarModal("¿Marcar todas las notificaciones como leídas?", function () {
+                fetch('../Funcionamiento/marcar_todas_leidas.php', {
+                    method: 'POST'
+                }).then(() => {
+                    document.querySelectorAll(".notificacion").forEach(noti => {
+                        noti.style.opacity = "0.3";
+                    });
+                });
+            });
+        });
     }
+
+    function mostrarModal(mensaje, callback) {
+        let modal = document.getElementById("modalConfirmacion");
+        let mensajeConfirmacion = document.getElementById("mensajeConfirmacion");
+        let btnConfirmar = document.getElementById("confirmarAccion");
+        let btnCancelar = document.getElementById("cancelarAccion");
+
+        if (!modal || !mensajeConfirmacion || !btnConfirmar || !btnCancelar) {
+            console.error("No se encontró el modal de confirmación.");
+            return;
+        }
+
+        mensajeConfirmacion.innerText = mensaje;
+        modal.style.display = "flex";
+
+        btnConfirmar.onclick = function () {
+            modal.style.display = "none";
+            callback();
+        };
+
+        btnCancelar.onclick = function () {
+            modal.style.display = "none";
+        };
+    }
+
+    cargarNotificaciones();
 });
