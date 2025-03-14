@@ -26,6 +26,5 @@ while ($row = mysqli_fetch_assoc($result)) {
     mysqli_stmt_execute($stmt);
 }
 
-mysqli_close($conexion);
-
-echo "Cálculo de calificaciones finales actualizado correctamente.";
+echo json_encode(["success" => true, "calificacion_final" => $calificacion_final]);
+exit();

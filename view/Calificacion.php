@@ -151,7 +151,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
     </div>
 
     <!-- Modal de Confirmación -->
-    <div class="modal fade" id="modalCalificacionGuardada" tabindex="-1" aria-labelledby="modalCalificacionGuardadaLabel" aria-hidden="true">
+    <div class="modal fade" id="modalCalificacionGuardada" tabindex="-1" aria-labelledby="modalCalificacionGuardadaLabel">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header bg-success text-white">
@@ -169,7 +169,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
     </div>
 
     <!-- Modal de Comentarios -->
-    <div class="modal fade" id="modalComentarios" tabindex="-1" aria-labelledby="modalComentariosLabel" aria-hidden="true">
+    <div class="modal fade" id="modalComentarios" tabindex="-1" aria-labelledby="modalComentariosLabel">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

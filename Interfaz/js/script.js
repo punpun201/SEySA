@@ -122,63 +122,70 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
-                    modal.show();
-        
-                    // 🔹 **Calcular calificación final para cada alumno**
-                    datos.forEach(alumno => {
-                        calcularCalificacionFinal(alumno.alumno_id, materia_id, periodo_id);
-                    });
-        
-                    // 🔹 **Recargar las calificaciones**
-                    cargarAlumnosYCalificaciones();
+                    console.log("Calificaciones guardadas correctamente.");
+                    
+                    // Generar notificaciones de parciales primero
+                    return fetch("../Funcionamiento/generar_alertas_parciales.php");
                 } else {
-                    alert("Error al guardar las calificaciones: " + data.message);
+                    throw new Error("Error al guardar las calificaciones: " + data.message);
                 }
             })
-            .catch(error => console.error("Error al guardar calificaciones:", error));
-        });
+            .then(response => response.text())
+            .then(text => {
+                console.log("Respuesta de notificaciones parciales:", text);
+        
+                // Luego calcular la calificación final de cada alumno
+                return Promise.all(datos.map(alumno => 
+                    calcularCalificacionFinal(alumno.alumno_id, materia_id, periodo_id)
+                ));
+            })
+            .then(() => {
+                console.log("Notificaciones generadas correctamente.");
+        
+                // Finalmente, mostrar el modal solo cuando todo haya terminado
+                let modal = new bootstrap.Modal(document.getElementById('modalCalificacionGuardada'));
+                modal.show();
 
-        function generarNotificaciones(alumno_id) {
-            fetch("../Funcionamiento/generar_notificaciones.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `alumno_id=${alumno_id}`
+                // Recargar calificaciones después de todo el proceso
+                cargarAlumnosYCalificaciones();
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Notificaciones generadas:", data);
-                if (!data.success) {
-                    console.warn("Error al generar notificaciones:", data.error);
-                }
-            })
-            .catch(error => console.error("Error al generar notificaciones:", error));
-        }
-       
+            .catch(error => console.error("Error en el proceso:", error));
+        });
+                
         // Función para calcular la calificación final
         function calcularCalificacionFinal(alumno_id, materia_id, periodo_id) {
-            fetch("../Funcionamiento/calificacion_final.php", {
+            return fetch("../Funcionamiento/calificacion_final.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: `alumno_id=${alumno_id}&materia_id=${materia_id}&periodo_id=${periodo_id}`
             })
+            .then(response => response.json()) // Convertir a JSON
+            .then(data => {
+                if (!data.success) {
+                    console.error("Error al calcular calificación final:", data.message);
+                    throw new Error("Cálculo fallido");
+                }
+
+                console.log(`Calificación final calculada para alumno ${alumno_id}: ${data.calificacion_final}`);
+
+                return fetch("../Funcionamiento/generar_notificaciones_final.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `alumno_id=${alumno_id}&materia_id=${materia_id}&periodo_id=${periodo_id}&calificacion_final=${data.calificacion_final}`
+                });
+            })
             .then(response => response.json())
             .then(data => {
-                console.log("Respuesta de calificación final:", data);
-                if (data.success) {
-                    const fila = document.querySelector(`tr[data-id='${alumno_id}']`);
-                    if (fila) {
-                        fila.querySelector("td:nth-child(5)").textContent = data.calificacion_final;
-                    }
-                    // 🔹 **Ejecutar la generación de notificaciones SOLO después de actualizar la calificación final**
-                    return generarNotificaciones(alumno_id);
-                } else {
-                    console.warn("Error al calcular calificación final:", data.error);
+                if (!data.success) {
+                    console.error("Error al generar notificación:", data.message);
+                    throw new Error("Notificación fallida");
                 }
+
+                console.log("Notificación generada correctamente.");
             })
-            .catch(error => console.error("Error al calcular calificación final:", error));
-        }                        
-    }
+            .catch(error => console.error("Error en la ejecución:", error));
+        }
+    }                    
      
     document.addEventListener("DOMContentLoaded", function () {
         let comentarioAlumnoId = null;
