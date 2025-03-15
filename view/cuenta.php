@@ -9,6 +9,7 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 
+// Obtener datos del usuario
 $query = "SELECT correo, contraseña FROM usuarios WHERE id = '$id_usuario'";
 $resultado = mysqli_query($conexion, $query);
 
@@ -17,6 +18,12 @@ if (!$resultado || mysqli_num_rows($resultado) === 0) {
 }
 
 $usuario = mysqli_fetch_assoc($resultado);
+$contraseña = $usuario['contraseña'];
+
+// Verificar si la contraseña está hasheada
+if (password_get_info($contraseña)['algo'] !== null) {
+    $contraseña = "******"; 
+}
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +64,7 @@ $usuario = mysqli_fetch_assoc($resultado);
             <div class="mb-3">
                 <label class="form-label"><strong>Contraseña:</strong></label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="passwordField" value="<?php echo htmlspecialchars($usuario['contraseña']); ?>" readonly>
+                    <input type="password" class="form-control" id="passwordField" value="<?php echo htmlspecialchars($contraseña); ?>" readonly>
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
                         <i class="fas fa-eye"></i>
                     </button>
@@ -108,5 +115,6 @@ $usuario = mysqli_fetch_assoc($resultado);
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../Interfaz/js/script4.js"></script>
+
 </body>
 </html>

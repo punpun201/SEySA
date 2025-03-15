@@ -26,13 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Verifica la contraseña directamente 
-        if ($contraseña === $fila_usuario['contraseña']) {
+        // Verifica la contraseña en texto plano o hasheada
+        if ($contraseña === $fila_usuario['contraseña'] || password_verify($contraseña, $fila_usuario['contraseña'])) {
             $_SESSION['id_usuario'] = $fila_usuario['id'];
             $_SESSION['nombre'] = $fila_usuario['nombre'];
             $_SESSION['correo'] = $fila_usuario['correo'];
             $_SESSION['telefono'] = $fila_usuario['telefono'];
-            $_SESSION['roles'] = explode(',', $fila_usuario['roles']); // Guarda los roles como array
+            $_SESSION['roles'] = explode(',', $fila_usuario['roles']); 
+
+            $_SESSION['contrasena_sin_hash'] = $contraseña_ingresada;
             
             header('Location: ../view/dashboard.php'); 
             exit();

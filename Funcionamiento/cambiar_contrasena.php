@@ -18,16 +18,17 @@ if (!isset($data["contrasena"])) {
 $nuevaContrasena = $data["contrasena"];
 $idUsuario = $_SESSION["id_usuario"];
 
-// Valida el formato de la contraseña
+// Validar formato de la contraseña
 if (!preg_match("/^[a-zA-Z0-9]{4,}$/", $nuevaContrasena)) {
     echo json_encode(["error" => "La contraseña debe tener mínimo 4 caracteres, solo letras y números."]);
     exit();
 }
 
-// Verifica si la contraseña ya existe en otro usuario 
+// Verificar si la contraseña ya existe en otro usuario
 $queryGlobalCheck = "SELECT id FROM usuarios WHERE contraseña = ?";
 $stmtCheckGlobal = $conexion->prepare($queryGlobalCheck);
-$stmtCheckGlobal->bind_param("s", $nuevaContrasena);
+$hashNuevaContrasena = password_hash($nuevaContrasena, PASSWORD_BCRYPT);
+$stmtCheckGlobal->bind_param("s", $hashNuevaContrasena);
 $stmtCheckGlobal->execute();
 $stmtCheckGlobal->store_result();
 
@@ -36,13 +37,13 @@ if ($stmtCheckGlobal->num_rows > 0) {
     exit();
 }
 
-// Guarda la contraseña en sesión
+// Guardar contraseña en sesión antes de hashearla
 $_SESSION["ultima_contrasena"] = $nuevaContrasena;
 
-// Actualiza la contraseña en la base de datos 
+// Hashear la nueva contraseña y actualizar en la base de datos
 $queryUpdate = "UPDATE usuarios SET contraseña = ? WHERE id = ?";
 $stmtUpdate = $conexion->prepare($queryUpdate);
-$stmtUpdate->bind_param("si", $nuevaContrasena, $idUsuario);
+$stmtUpdate->bind_param("si", $hashNuevaContrasena, $idUsuario);
 
 if ($stmtUpdate->execute()) {
     echo json_encode(["success" => "Contraseña actualizada correctamente."]);
