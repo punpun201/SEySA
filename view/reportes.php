@@ -1,6 +1,4 @@
 <?php
-include ("../Funcionamiento/db/conexion.php");
-
 session_start();
 if (!isset($_SESSION['id_usuario'])) {
     header('Location: index.php?error=Debes iniciar sesión.');
@@ -18,13 +16,14 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Académico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Interfaz/css/style4.css">
+    <link rel="stylesheet" href="../Interfaz/css/style6.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -62,31 +61,8 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </ul>
     </div>
 
-    <!-- Contenedor de notificaciones -->
-    <div class="notificaciones">
-        <h2 class="titulo-notificaciones">Notificaciones</h2>
-        <button id="marcarTodasLeidas" class="btn-marcar-todo">
-            <i class="fas fa-check-double"></i> Marcar todas como leídas
-        </button>
-
-        <div id="notificacionesDiv" class="notificaciones-container">
-            <p>Cargando notificaciones...</p>
-        </div>
-    </div>
-
-    <!-- Modal de confirmación -->
-    <div id="modalConfirmacion" class="modal">
-        <div class="modal-contenido">
-            <h3 id="mensajeConfirmacion"></h3>
-            <div class="modal-botones">
-                <button id="confirmarAccion" class="btn-confirmar">Confirmar</button>
-                <button id="cancelarAccion" class="btn-cancelar">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../Interfaz/js/script2.js"></script>
+    <script src="../Interfaz/js/script6.js"></script>
+
 </body>
 </html>

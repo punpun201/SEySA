@@ -44,7 +44,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
                 <li><a href="#"><i class="fas fa-book"></i> <span class="text">Materias</span></a></li>
             <?php endif; ?>
             <?php if ($es_docente || $es_admin): ?>
-                <li><a href="#"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
+                <li><a href="estadistica.php"><i class="fas fa-chart-line"></i> <span class="text">Estadísticas</span></a></li>
             <?php endif; ?>
             <?php if ($es_alumno || $es_docente): ?>
                 <li><a href="Calificacion.php"><i class="fas fa-clipboard-check"></i> <span class="text">Calificación</span></a></li>
@@ -52,9 +52,11 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             <?php if ($es_alumno || $es_docente): ?>
                 <li><a href="notificacion.php"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
             <?php endif; ?>
+            <?php if ($es_admin || $es_docente): ?>
+                <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Reportes</span></a></li>
+            <?php endif; ?>
             <?php if ($es_admin): ?>
-                <li><a href="#"><i class="fas fa-cogs"></i> <span class="text">Reportes</span></a></li>
-                <li><a href="generar_usuario.php" data-section="lista"><i class="fas fa-cogs"></i> <span class="text">Crear usuario</span></a></li>
+                <li><a href="generar_usuario.php" data-section="lista"><i class="fa-solid fa-user-plus"></i><span class="text">Crear usuario</span></a></li>
             <?php endif; ?>
         </ul>
     </div>
