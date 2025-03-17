@@ -5,12 +5,10 @@ if (!isset($_SESSION['id_usuario'])) {
     exit();
 }
 
-$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
-
-// Verifica los roles del usuario
-$es_admin = in_array("Administrador", $_SESSION['roles']);
-$es_docente = in_array("Docente", $_SESSION['roles']);
-$es_alumno = in_array("Alumno", $_SESSION['roles']);
+$roles_usuario = $_SESSION['roles'] ?? [];
+$es_admin = in_array("Administrador", (array)$roles_usuario);
+$es_docente = in_array("Docente", (array)$roles_usuario);
+$es_alumno = in_array("Alumno", (array)$roles_usuario);
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +21,6 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Interfaz/css/style6.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -52,8 +49,11 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
             <?php if ($es_alumno || $es_docente): ?>
                 <li><a href="notificacion.php"><i class="fas fa-bell"></i> <span class="text">Notificaciones</span></a></li>
             <?php endif; ?>
-            <?php if ($es_admin || $es_docente): ?>
+            <?php if ($es_docente): ?>
                 <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Reportes</span></a></li>
+            <?php endif; ?>
+            <?php if ($es_admin): ?>
+                <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Rendimiento</span></a></li>
             <?php endif; ?>
             <?php if ($es_admin): ?>
                 <li><a href="generar_usuario.php" data-section="lista"><i class="fa-solid fa-user-plus"></i><span class="text">Crear usuario</span></a></li>
@@ -61,8 +61,53 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </ul>
     </div>
 
+    <div class="content">
+        <div class="page-header">
+            <h2><i class="fa-solid fa-print"></i> Generación de reportes</h2>
+            <p>Seleccione el tipo de reporte que desea generar.</p>
+        </div>
+    
+        <?php if ($es_docente): ?>           
+        <div class="tab-content" id="reporteAlumno">
+
+        <div class="selectores-container d-flex gap-3">
+            <div class="selector-box w-50">
+                <label for="periodo" class="form-label">
+                    <i class="fas fa-calendar-alt"></i> Selecciona el período:
+                </label>
+                <select id="periodo" class="form-select" data-usuario="<?php echo $es_docente ? 'docente' : 'alumno'; ?>">
+                    <option value="">Selecciona un período</option>
+                </select>
+            </div>
+
+            <div class="selector-box w-50">
+                <label for="materiaGrupo" class="form-label">
+                    <i class="fas fa-book"></i> Materias asignadas:
+                </label>
+                <select id="materiaSelect" class="form-select">
+                    <option value="">Selecciona una materia</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="reporteAlumno">
+            <h3>Reportes Individuales por Alumno</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nombre</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="alumnoLista">
+                    <!-- Datos de alumnos cargados dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../Interfaz/js/script6.js"></script>
-
 </body>
 </html>

@@ -5,12 +5,10 @@ if (!isset($_SESSION['id_usuario'])) {
     exit();
 }
 
-$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
-
-// Verifica los roles del usuario
-$es_admin = in_array("Administrador", $_SESSION['roles']);
-$es_docente = in_array("Docente", $_SESSION['roles']);
-$es_alumno = in_array("Alumno", $_SESSION['roles']);
+$roles_usuario = $_SESSION['roles'] ?? [];
+$es_admin = in_array("Administrador", (array)$roles_usuario);
+$es_docente = in_array("Docente", (array)$roles_usuario);
+$es_alumno = in_array("Alumno", (array)$roles_usuario);
 ?>
 
 <!DOCTYPE html>
@@ -22,8 +20,7 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Interfaz/css/style2.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../Interfaz/css/style6.css">
 </head>
 <body>
 
@@ -64,37 +61,13 @@ $es_alumno = in_array("Alumno", $_SESSION['roles']);
         </ul>
     </div>
 
-    <!-- Contenido Principal -->
-    <div class="content" id="content">
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card info-card">
-                        <i class="fas fa-user-graduate"></i>
-                        <h5>Alumnos Registrados</h5>
-                        <p>320</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card info-card">
-                        <i class="fas fa-book"></i>
-                        <h5>Materias Activas</h5>
-                        <p>18</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card info-card">
-                        <i class="fas fa-chart-pie"></i>
-                        <h5>Alumnos en Riesgo</h5>
-                        <p>45</p>
-                    </div>
-                </div>
-            </div>
+    <div class="content">
+        <div class="page-header">
+            <h2><i class="fa-solid fa-print"></i> Generación de reportes</h2>
+            <p>Seleccione el tipo de reporte que desea generar.</p>
         </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../Interfaz/js/script.js"></script>
-
+    <script src="../Interfaz/js/script6.js"></script>
 </body>
 </html>
