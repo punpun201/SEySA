@@ -65,9 +65,34 @@ document.addEventListener("DOMContentLoaded", function() {
                     <tr>
                         <td>${alumno.matricula}</td>
                         <td>${alumno.nombre}</td>
-                        <td><button class="btn generate-report" data-id="${alumno.matricula}"><i class="fas fa-file-pdf"></i> Generar</button></td>
+                        <td>
+                            <button class="btn generate-report"
+                                data-matricula="${alumno.matricula}"
+                                data-materia="${materiaId}"
+                                data-periodo="${periodoId}">
+                                <i class="fas fa-file-pdf"></i> Generar
+                            </button>
+                        </td>
                     </tr>`;
             });
+
+            // Agregar evento a los botones de generación de PDF
+            document.querySelectorAll(".generate-report").forEach(button => {
+                button.addEventListener("click", function () {
+                    const matricula = this.getAttribute("data-matricula");
+                    const materiaId = this.getAttribute("data-materia");
+                    const periodoId = this.getAttribute("data-periodo");
+            
+                    console.log("Intentando generar PDF con:", { matricula, materiaId, periodoId });
+            
+                    if (!matricula || !materiaId || !periodoId) {
+                        alert("Error: Faltan datos para generar el PDF.");
+                        return;
+                    }
+            
+                    window.open(`../Funcionamiento/pdf/reporte_pdf.php?matricula=${matricula}&materia_id=${materiaId}&periodo_id=${periodoId}`, "_blank");
+                });
+            });            
         })
         .catch(error => console.error("Error cargando alumnos:", error));
     });
