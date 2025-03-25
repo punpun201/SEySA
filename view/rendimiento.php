@@ -20,7 +20,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Interfaz/css/style6.css">
+    <link rel="stylesheet" href="../Interfaz/css/style7.css">
 </head>
 <body>
 
@@ -53,7 +53,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                 <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Reportes</span></a></li>
             <?php endif; ?>
             <?php if ($es_admin): ?>
-                <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Rendimiento</span></a></li>
+                <li><a href="rendimiento.php"><i class="fa-solid fa-print"></i> <span class="text">Rendimiento</span></a></li>
             <?php endif; ?>
             <?php if ($es_admin): ?>
                 <li><a href="generar_usuario.php" data-section="lista"><i class="fa-solid fa-user-plus"></i><span class="text">Crear usuario</span></a></li>
@@ -66,8 +66,53 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
             <h2><i class="fa-solid fa-print"></i> Generación de reportes</h2>
             <p>Seleccione el tipo de reporte que desea generar.</p>
         </div>
+        <div class="page-header">
+        
+        <select id="tipo-reporte" class="form-select mb-4 w-50 mx-auto">
+            <option value="">Selecciona una opción</option>
+            <option value="docente">Por Docente</option>
+            <option value="grupo">Por Grupo</option>
+            <option value="global">Global</option>
+        </select>
+    </div>
+
+    <!-- Contenedores por tipo -->
+    <div id="reporte-docente" class="reporte-section" style="display:none;">
+        <h4>📋 Reporte por Docente</h4>
+        <div class="mb-4">
+            <label for="periodo-docente" class="form-label"><i class="fas fa-calendar-alt"></i> Selecciona el período:</label>
+            <select id="periodo-docente" class="form-select w-50 mx-auto">
+                <option value="">Selecciona un período</option>
+            </select>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nombre del Docente</th>
+                        <th>Materia</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-docentes">
+                    <tr><td colspan="4">Seleccione un período para ver los docentes.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div id="reporte-grupo" class="reporte-section" style="display:none;">
+        <h4>👥 Reporte por Grupo</h4>
+        <!-- Aquí va el contenido del reporte por grupo -->
+    </div>
+
+    <div id="reporte-global" class="reporte-section" style="display:none;">
+        <h4>🌐 Reporte Global</h4>
+        <!-- Aquí va el contenido del reporte global -->
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../Interfaz/js/script6.js"></script>
+    <script src="../Interfaz/js/script7.js"></script>
 </body>
 </html>

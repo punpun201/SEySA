@@ -53,7 +53,7 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                 <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Reportes</span></a></li>
             <?php endif; ?>
             <?php if ($es_admin): ?>
-                <li><a href="reportes.php"><i class="fa-solid fa-print"></i> <span class="text">Rendimiento</span></a></li>
+                <li><a href="rendimiento.php"><i class="fa-solid fa-print"></i> <span class="text">Rendimiento</span></a></li>
             <?php endif; ?>
             <?php if ($es_admin): ?>
                 <li><a href="generar_usuario.php" data-section="lista"><i class="fa-solid fa-user-plus"></i><span class="text">Crear usuario</span></a></li>

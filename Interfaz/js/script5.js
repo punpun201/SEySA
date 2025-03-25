@@ -79,7 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         datasets: [{
                             label: 'Promedio de Calificaciones',
                             data: data.promedios_parciales,
-                            backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.6)',   // Azul - Parcial 1
+                                'rgba(255, 206, 86, 0.6)',   // Amarillo - Parcial 2
+                                'rgba(255, 99, 132, 0.6)'    // Rojo - Parcial 3
+                            ]
                         }]
                     },
                     options: {
