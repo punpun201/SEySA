@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const periodo = btn.dataset.periodo;
             const materia = btn.dataset.materia;
 
-            const url = `../Funcionamiento/pdf/reporte_rendimiento_docente.php?docente=${docente}&periodo=${periodo}&materia=${materia}`;
+            const url = `../Funcionamiento/pdf/reporte_docente.php?matricula_docente=${docente}&periodo_id=${periodo}&materia_id=${materia}`;
             window.open(url, "_blank");
         }
     });
