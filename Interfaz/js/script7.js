@@ -45,17 +45,41 @@ document.addEventListener("DOMContentLoaded", function () {
     periodoDocente.addEventListener("change", function () {
         const periodoId = this.value;
         if (!periodoId) return;
-
+    
         fetch(`../Funcionamiento/obtener_periodos_docente.php?periodo_id=${periodoId}`)
             .then(res => res.json())
             .then(data => {
-                tablaDocentes.innerHTML = ""; // Limpiar tabla
-
-                if (data.length === 0) {
-                    tablaDocentes.innerHTML = `<tr><td colspan="4">No se encontraron docentes en este período.</td></tr>`;
-                    return;
+                const contenedorSelect = document.getElementById("docente-select");
+                contenedorSelect.innerHTML = '<option value="">Selecciona un docente</option>';
+                tablaDocentes.innerHTML = ""; // Limpiar tabla también
+    
+                // Filtrar docentes únicos por matrícula
+                const docentesUnicos = {};
+                data.forEach(doc => {
+                    if (!docentesUnicos[doc.matricula_docente]) {
+                        docentesUnicos[doc.matricula_docente] = doc.nombre;
+                    }
+                });
+    
+                for (const matricula in docentesUnicos) {
+                    contenedorSelect.innerHTML += `<option value="${matricula}">${docentesUnicos[matricula]}</option>`;
                 }
-
+    
+                // Al seleccionar docente
+                contenedorSelect.addEventListener("change", function () {
+                    const matriculaDocente = this.value;
+                    if (!matriculaDocente) return;
+    
+                    // Filtrar materias solo del docente seleccionado
+                    const materiasDocente = data.filter(d => d.matricula_docente === matriculaDocente);
+    
+                    tablaDocentes.innerHTML = ""; // Limpiar
+    
+                    if (materiasDocente.length === 0) {
+                        tablaDocentes.innerHTML = `<tr><td colspan="4">Este docente no tiene materias registradas.</td></tr>`;
+                        return;
+                    }
+                
                 data.forEach(docente => {
                     tablaDocentes.innerHTML += `
                         <tr>
@@ -73,7 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         </tr>`;
                 });
             });
-    });
+         });
+});
 
     // Botón de generación de PDF por docente
     document.addEventListener("click", function (e) {

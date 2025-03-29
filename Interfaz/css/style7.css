@@ -185,3 +185,31 @@ body {
     max-width: 900px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
+.row-selectores {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 20px auto;
+    max-width: 900px;
+    gap: 20px;
+}
+
+.selector-item {
+    flex: 1;
+}
+
+.selector-item label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.selector-item select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}

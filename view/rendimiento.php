@@ -79,11 +79,24 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
     <!-- Contenedores por tipo -->
     <div id="reporte-docente" class="reporte-section" style="display:none;">
         <h4>📋 Reporte por Docente</h4>
-        <div class="mb-4">
-            <label for="periodo-docente" class="form-label"><i class="fas fa-calendar-alt"></i> Selecciona el período:</label>
-            <select id="periodo-docente" class="form-select w-50 mx-auto">
-                <option value="">Selecciona un período</option>
-            </select>
+        <div class="row-selectores mb-4">
+            <div class="selector-item">
+                <label for="periodo-docente" class="form-label">
+                    <i class="fas fa-calendar-alt"></i> Selecciona el período:
+                </label>
+                <select id="periodo-docente" class="form-select">
+                    <option value="">Selecciona un período</option>
+                </select>
+            </div>
+
+            <div class="selector-item">
+                <label for="docente-select" class="form-label">
+                    <i class="fa-solid fa-user-tie"></i> Selecciona un docente:
+                </label>
+                <select id="docente-select" class="form-select">
+                    <option value="">Selecciona un docente</option>
+                </select>
+            </div>
         </div>
 
         <div class="table-responsive mt-4">
