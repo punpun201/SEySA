@@ -98,6 +98,85 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+        // Botón para exportar PDF
+        const exportarBtn = document.getElementById("exportarPDF");
+        if (exportarBtn) {
+            exportarBtn.addEventListener("click", async () => {
+                const { jsPDF } = window.jspdf;
+                const contenedor = document.getElementById("estadisticas-container");
+            
+                if (!contenedor) {
+                    alert("No se encontró el contenedor a exportar.");
+                    return;
+                }
+            
+                // Captura de la gráfica
+                const canvas = await html2canvas(contenedor, {
+                    backgroundColor: "#ffffff",
+                    scale: 2
+                });
+            
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const margin = 15;
+            
+                // Información para el encabezado
+                const materia = materiaSelect.options[materiaSelect.selectedIndex]?.text || "-";
+                const periodo = periodoSelect.options[periodoSelect.selectedIndex]?.text || "-";
+
+                // Encabezado principal
+                pdf.setFont("Helvetica", "bold");
+                pdf.setFontSize(16);
+                pdf.text("Estadísticas de Rendimiento Académico", pdfWidth / 2, margin, { align: "center" });
+
+                // Subtítulos: Periodo y materia
+                pdf.setFontSize(12);
+                pdf.text(`${periodo}`, pdfWidth / 2, margin + 10, { align: "center" });
+
+                pdf.text(`${materia}`, pdfWidth / 2, margin + 18, { align: "center" });
+
+                // Resumen de datos alineado a la izquierda
+                const resumenData = [
+                    `Inscritos: ${numInscritos.innerText}`,
+                    `Aprobados: ${numAprobados.innerText}`,
+                    `En Riesgo: ${numRiesgo.innerText}`,
+                    `Reprobados: ${numReprobados.innerText}`,
+                    `Promedio Global: ${promedioGeneral.innerText}`,
+                ];
+            
+                // Encabezado
+                pdf.setFont("Helvetica", "bold");
+                pdf.setFontSize(16);
+                pdf.text("Estadísticas de Rendimiento Académico", pdfWidth / 2, margin, { align: "center" });
+            
+                // Subtítulo y datos
+                pdf.setFontSize(12);
+                pdf.setFont("Helvetica", "");
+
+                // Espaciado: Dejaa más espacio entre encabezado y resumen
+                let currentY = margin + 30; 
+
+                resumenData.forEach(line => {
+                    pdf.text(line, margin, currentY);
+                    currentY += 7;
+                });
+
+                // Inserta las gráficas debajo del resumen
+                const imgProps = pdf.getImageProperties(imgData);
+                const imageHeight = (imgProps.height * (pdfWidth - margin * 2)) / imgProps.width;
+            
+                if (currentY + imageHeight > pdfHeight - margin) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
+            
+                pdf.addImage(imgData, "PNG", margin, currentY, pdfWidth - margin * 2, imageHeight);
+                pdf.save("estadisticas_rendimiento.pdf");
+            });            
+        }
+    
     periodoSelect.addEventListener("change", cargarEstadisticas);
     materiaSelect.addEventListener("change", cargarEstadisticas);
 });
