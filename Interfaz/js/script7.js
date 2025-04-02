@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const tipoReporte = document.getElementById("tipo-reporte");
     const periodoDocente = document.getElementById("periodo-docente");
     const tablaDocentes = document.getElementById("tabla-docentes");
+    const periodoGrupo = document.getElementById("periodo-grupo");
+    const grupoSelect = document.getElementById("grupo-select");
+    const generarGrupoBtn = document.getElementById("generar-reporte-grupo");
 
     toggleSidebar.addEventListener("click", function () {
         sidebar.classList.toggle("collapsed");
@@ -24,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (seleccion === "docente") {
-            // Cargar periodos solo una vez
             fetch("../Funcionamiento/obtener_periodos_admin.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -32,16 +34,31 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then(res => res.json())
                 .then(data => {
-                    // Limpiar antes de cargar
                     periodoDocente.innerHTML = '<option value="">Selecciona un período</option>';
                     data.forEach(p => {
                         periodoDocente.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
                     });
                 });
         }
+
+        else if (seleccion === "grupo") {
+            fetch("../Funcionamiento/obtener_periodos_admin.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "listar=true"
+            })
+            .then(res => res.json())
+            .then(data => {
+                periodoGrupo.innerHTML = '<option value="">Selecciona un período</option>';
+                data.forEach(p => {
+                    periodoGrupo.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
+                });
+            });
+        
+        }
     });
 
-    // Al seleccionar un período, cargar docentes
+    // DOCENTE
     periodoDocente.addEventListener("change", function () {
         const periodoId = this.value;
         if (!periodoId) return;
@@ -97,8 +114,30 @@ document.addEventListener("DOMContentLoaded", function () {
                         </tr>`;
                 });
             });
-         });
-});
+
+        // GRUPAL
+        periodoGrupo.addEventListener("change", function () {
+            const periodoId = this.value;
+            if (!periodoId) return;
+        
+            fetch(`../Funcionamiento/obtener_grupos.php?periodo_id=${periodoId}`)
+                .then(res => res.json())
+                .then(grupos => {
+                    grupoSelect.innerHTML = '<option value="">Selecciona un grupo</option>';
+                    grupos.forEach(grupo => {
+                        grupoSelect.innerHTML += `<option value="${grupo.id}">${grupo.nombre}</option>`;
+                    });
+                })
+                .catch(error => console.error("Error cargando grupos:", error));
+        });
+        
+        // Mostrar botón al seleccionar grupo
+        grupoSelect.addEventListener("change", function () {
+            const grupoId = this.value;
+            if (generarGrupoBtn) generarGrupoBtn.style.display = grupoId ? "inline-block" : "none";
+
+        });
+    });
 
     // Botón de generación de PDF por docente
     document.addEventListener("click", function (e) {
@@ -111,5 +150,20 @@ document.addEventListener("DOMContentLoaded", function () {
             const url = `../Funcionamiento/pdf/reporte_docente.php?matricula_docente=${docente}&periodo_id=${periodo}&materia_id=${materia}`;
             window.open(url, "_blank");
         }
-    });
+        
+    // Botón de generación de PDF por grupo
+        if (e.target.id === "generar-reporte-grupo") {
+            const periodoId = periodoGrupo.value;
+            const grupoId = grupoSelect.value;
+
+            if (!periodoId || !grupoId) {
+                alert("Por favor, selecciona un período y un grupo.");
+                return;
+            }
+
+            const url = `../Funcionamiento/pdf/reporte_grupal.php?grupo_id=${grupoId}&periodo_id=${periodoId}`;
+            window.open(url, "_blank");
+        }
+    }); 
+}); 
 });

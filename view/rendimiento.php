@@ -114,10 +114,33 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                 </tbody>
             </table>
         </div>
-
+    </div>
+    
     <div id="reporte-grupo" class="reporte-section" style="display:none;">
         <h4>👥 Reporte por Grupo</h4>
-        <!-- Aquí va el contenido del reporte por grupo -->
+        <div class="row-selectores mb-4">
+            <div class="selector-item">
+                <label for="periodo-grupo" class="form-label">
+                    <i class="fas fa-calendar-alt"></i> Selecciona el período:
+                </label>
+                <select id="periodo-grupo" class="form-select">
+                    <option value="">Selecciona un período</option>
+                </select>
+            </div>
+
+            <div class="selector-item">
+                <label for="grupo-select" class="form-label">
+                    <i class="fas fa-users"></i> Selecciona el grupo:
+                </label>
+                <select id="grupo-select" class="form-select">
+                    <option value="">Selecciona un grupo</option>
+                </select>
+            </div>
+
+            <button id="generar-reporte-grupo" class="btn btn-success mt-3" style="display:none;">
+                <i class="fas fa-file-pdf"></i> Generar Reporte del Grupo
+            </button>
+        </div>
     </div>
 
     <div id="reporte-global" class="reporte-section" style="display:none;">
