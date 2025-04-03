@@ -47,12 +47,12 @@ $pdf->Ln(30);
 $pdf->SetFillColor(25, 50, 100); 
 $pdf->SetTextColor(255); 
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(180, 12, 'SISTEMA DE EVALUACION ACADEMICA', 0, 1, 'C', true);
+$pdf->Cell(0, 10, utf8_decode('SISTEMA DE EVALUACIÓN ACADÉMICA'), 0, 1, 'C');
 $pdf->Ln(2); 
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(0, 5, 'Direccion: Calle 16, Numero 278, San Francisco de Campeche, Campeche', 0, 1, 'C');
-$pdf->Cell(0, 5, 'Tel: +52 123 456 7890 - Email: contacto@red.seysa.mx', 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_decode('Direccion: Calle 16, Numero 278, San Francisco de Campeche, Campeche'), 0, 1, 'C');
+$pdf->Cell(0, 5, utf8_decode('Tel: +52 123 456 7890 - Email: contacto@red.seysa.mx'), 0, 1, 'C');
 $pdf->Ln(15);
 
 // Datos del estudiante
