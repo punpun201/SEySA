@@ -186,53 +186,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error en la ejecución:", error));
         }
     }                    
-     
-    document.addEventListener("DOMContentLoaded", function () {
-        let comentarioAlumnoId = null;
-    
-        // Evento para abrir el modal y cargar el comentario del alumno
-        document.addEventListener("click", function (event) {
-            if (event.target.classList.contains("comentario-alumno")) {
-                comentarioAlumnoId = event.target.getAttribute("data-id");
-                const nombreAlumno = event.target.getAttribute("data-nombre");
-                document.getElementById("comentarioAlumnoNombre").textContent = nombreAlumno;
-    
-                // Obtener el comentario guardado
-                fetch("Funcionamiento/obtener_comentario.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `alumno_id=${comentarioAlumnoId}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("comentarioTexto").value = data.comentario || "";
-                    new bootstrap.Modal(document.getElementById("modalComentarios")).show();
-                })
-                .catch(error => console.error("Error al obtener comentario:", error));
-            }
-        });
-    
-        // Guardar comentario en la base de datos
-        document.getElementById("guardarComentario").addEventListener("click", function () {
-            const comentarioTexto = document.getElementById("comentarioTexto").value;
-    
-            fetch("../Funcionamiento/guardar_comentario.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `alumno_id=${comentarioAlumnoId}&comentario=${encodeURIComponent(comentarioTexto)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Comentario guardado correctamente");
-                    bootstrap.Modal.getInstance(document.getElementById("modalComentarios")).hide();
-                } else {
-                    alert("Error al guardar comentario");
-                }
-            })
-            .catch(error => console.error("Error al guardar comentario:", error));
-        });
-    });
     
     // ALUMNOS
     if (usuarioTipo === "alumno") {
@@ -249,16 +202,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("Respuesta del servidor:", data); 
                 tablaAlumno.innerHTML = ""; 
-    
+            
+                if (!Array.isArray(data)) {
+                    console.error("La respuesta no es un arreglo:", data);
+                    tablaAlumno.innerHTML = `<tr><td colspan="5" class="text-center">Error en los datos recibidos.</td></tr>`;
+                    return;
+                }
+            
                 if (data.length === 0) {
                     console.warn("No hay calificaciones registradas.");
                     tablaAlumno.innerHTML = `<tr><td colspan="5" class="text-center">No hay calificaciones registradas.</td></tr>`;
                     return;
                 }
-    
+            
                 data.forEach(calificacion => {
-                    console.log(`Procesando: ${calificacion.materia} - P1: ${calificacion.parcial_1}, P2: ${calificacion.parcial_2}, P3: ${calificacion.parcial_3}`);
-    
                     tablaAlumno.innerHTML += `
                         <tr>
                             <td>${calificacion.materia}</td>
@@ -268,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <td>${calificacion.calificacion_final ?? 'Pendiente'}</td>
                         </tr>`;
                 });
-            })
+            })            
             .catch(error => console.error("Error cargando calificaciones del alumno:", error));
         });
     }    
