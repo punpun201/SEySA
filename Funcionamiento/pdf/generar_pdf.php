@@ -39,6 +39,9 @@ $matricula = $tipo === "alumno" ? $datos['matricula'] : $datos['matricula_docent
 $usuario = $datos['usuario'];
 $contrasena = $datos['contraseña'];
 
+$esHasheada = str_starts_with($datos['contraseña'], '$2y$');
+$contrasenaMostrar = $esHasheada ? 'MODIFICADA' : $datos['contraseña'];
+
 $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true);
@@ -74,14 +77,14 @@ $pdf->Ln(10);
 $pdf->SetX(($pdf->GetPageWidth() - 100) / 2);
 $pdf->SetFillColor(200, 200, 200);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(90, 8, utf8_decode('Credenciales de Acceso'), 1, 1, 'C', true);
+$pdf->Cell(100, 8, utf8_decode('Credenciales de Acceso'), 1, 1, 'C', true);
 $pdf->SetX(($pdf->GetPageWidth() - 100) / 2);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(45, 8, 'Usuario', 1);
-$pdf->Cell(45, 8, $usuario, 1, 1);
+$pdf->Cell(55, 8, $usuario, 1, 1);
 $pdf->SetX(($pdf->GetPageWidth() - 100) / 2);
 $pdf->Cell(45, 8, utf8_decode('Contraseña'), 1);
-$pdf->Cell(45, 8, $contrasena, 1, 1);
+$pdf->Cell(55, 8, $contrasenaMostrar, 1, 1);
 $pdf->Ln(15);
 
 // LÍNEA SEPARADORA ANTES DE LA FIRMA

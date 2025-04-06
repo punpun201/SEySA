@@ -63,15 +63,18 @@ $pdf->Ln(5);
 // Regresar el puntero al inicio para procesar todos los datos
 $resultado->data_seek(0);
 
-
+// Nombre de la materia (como encabezado extra arriba de la tabla)
+$pdf->Ln(5);
+$pdf->SetFont('Arial', 'B', 11);
+$pdf->Cell(0, 8, utf8_decode('Materia: ' . $row['materia']), 0, 1, 'C');
+$pdf->Ln(3);
 
 // Encabezado de tabla
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->SetFillColor(220, 220, 220);
-$pdf->SetX(20); 
+$pdf->SetX(50); 
 $pdf->Cell(50, 10, utf8_decode('Alumno'), 1, 0, 'C', true);
 $pdf->Cell(30, 10, 'Matricula', 1, 0, 'C', true);
-$pdf->Cell(60, 10, 'Materia', 1, 0, 'C', true);
 $pdf->Cell(20, 10, 'P1', 1, 0, 'C', true);
 $pdf->Cell(20, 10, 'P2', 1, 0, 'C', true);
 $pdf->Cell(20, 10, 'P3', 1, 0, 'C', true);
@@ -83,14 +86,13 @@ $pdf->SetFont('Arial', '', 9);
 while ($row = $resultado->fetch_assoc()) {
     $estatus = $row['calificacion_final'] >= 6 ? 'APROBADO' : 'REPROBADO';
 
-    $pdf->SetX(20); 
+    $pdf->SetX(50); 
     $pdf->Cell(50, 8, utf8_decode($row['alumno']), 1);
     $pdf->Cell(30, 8, $row['matricula'], 1);
-    $pdf->Cell(60, 8, utf8_decode($row['materia']), 1);
     $pdf->Cell(20, 8, intval($row['parcial_1']), 1, 0, 'C');
     $pdf->Cell(20, 8, intval($row['parcial_2']), 1, 0, 'C');
     $pdf->Cell(20, 8, intval($row['parcial_3']), 1, 0, 'C');
-    $pdf->Cell(25, 8, number_format($row['calificacion_final'], 1), 1, 0, 'C');
+    $pdf->Cell(25, 8, number_format($row['calificacion_final'],), 1, 0, 'C');
 
     // Estatus con color
     if ($estatus === 'APROBADO') {

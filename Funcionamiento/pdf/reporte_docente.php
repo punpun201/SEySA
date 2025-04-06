@@ -110,7 +110,7 @@ foreach ($datos as $alumno) {
     $pdf->Cell(15, 10, round($alumno['parcial_1']), 1, 0, 'C');
     $pdf->Cell(15, 10, round($alumno['parcial_2']), 1, 0, 'C');
     $pdf->Cell(15, 10, round($alumno['parcial_3']), 1, 0, 'C');
-    $pdf->Cell(20, 10, number_format($final, 2), 1, 0, 'C');
+    $pdf->Cell(20, 10, number_format($final,), 1, 0, 'C');
     $pdf->Cell(30, 10, $estatus, 1, 1, 'C');
 }
 
