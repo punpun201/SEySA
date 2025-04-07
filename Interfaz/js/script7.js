@@ -82,40 +82,59 @@ document.addEventListener("DOMContentLoaded", function () {
                     contenedorSelect.innerHTML += `<option value="${matricula}">${docentesUnicos[matricula]}</option>`;
                 }
     
-                // Al seleccionar docente
-                contenedorSelect.addEventListener("change", function () {
-                    const matriculaDocente = this.value;
-                    if (!matriculaDocente) return;
-    
-                    // Filtrar materias solo del docente seleccionado
-                    const materiasDocente = data.filter(d => d.matricula_docente === matriculaDocente);
-    
-                    tablaDocentes.innerHTML = ""; // Limpiar
-    
-                    if (materiasDocente.length === 0) {
-                        tablaDocentes.innerHTML = `<tr><td colspan="4">Este docente no tiene materias registradas.</td></tr>`;
-                        return;
-                    }
-                
-                data.forEach(docente => {
-                    tablaDocentes.innerHTML += `
-                        <tr>
-                            <td>${docente.matricula_docente}</td>
-                            <td>${docente.nombre}</td>
-                            <td>${docente.materia}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary generar-reporte-docente" 
-                                    data-docente="${docente.matricula_docente}" 
-                                    data-periodo="${periodoId}" 
-                                    data-materia="${docente.materia_id}">
-                                    <i class="fas fa-file-pdf"></i> Generar Reporte
-                                </button>
-                            </td>
-                        </tr>`;
+            // Al seleccionar docente
+            contenedorSelect.addEventListener("change", function () {
+                const matriculaDocente = this.value;
+                if (!matriculaDocente) return;
+
+            // Filtrar materias solo del docente seleccionado
+            const materiasDocente = data.filter(d => d.matricula_docente === matriculaDocente);
+
+            tablaDocentes.innerHTML = ""; // Limpiar
+
+            if (materiasDocente.length === 0) {
+                tablaDocentes.innerHTML = `<tr><td colspan="4">Este docente no tiene materias registradas.</td></tr>`;
+                return;
+            }
+
+            // Generar tabla solo con materias del docente seleccionado
+            materiasDocente.forEach(docente => {
+                tablaDocentes.innerHTML += `
+                    <tr>
+                        <td>${docente.matricula_docente}</td>
+                        <td>${docente.nombre}</td>
+                        <td>${docente.materia}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary generar-reporte-docente" 
+                                data-docente="${docente.matricula_docente}" 
+                                data-periodo="${periodoId}" 
+                                data-materia="${docente.materia_id}">
+                                <i class="fas fa-file-pdf"></i> Generar Reporte
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+        });
+    });
+
+     // GRUPAL
+     tipoReporte.addEventListener("change", function () {
+        if (seleccion === "grupo") {
+            fetch("../Funcionamiento/obtener_periodos_admin.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "listar=true"
+            })
+            .then(res => res.json())
+            .then(data => {
+                periodoGrupo.innerHTML = '<option value="">Selecciona un período</option>';
+                data.forEach(p => {
+                    periodoGrupo.innerHTML += `<option value="${p.id}">${p.nombre}</option>`;
                 });
             });
+        }
+    });
 
-        // GRUPAL
         periodoGrupo.addEventListener("change", function () {
             const periodoId = this.value;
             if (!periodoId) return;
@@ -130,40 +149,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .catch(error => console.error("Error cargando grupos:", error));
         });
-        
+    
         // Mostrar botón al seleccionar grupo
         grupoSelect.addEventListener("change", function () {
             const grupoId = this.value;
             if (generarGrupoBtn) generarGrupoBtn.style.display = grupoId ? "inline-block" : "none";
 
         });
-    });
 
-    // Botón de generación de PDF por docente
-    document.addEventListener("click", function (e) {
-        if (e.target.classList.contains("generar-reporte-docente") || e.target.closest(".generar-reporte-docente")) {
-            const btn = e.target.closest(".generar-reporte-docente");
-            const docente = btn.dataset.docente;
-            const periodo = btn.dataset.periodo;
-            const materia = btn.dataset.materia;
+        // Botón de generación de PDF por docente
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("generar-reporte-docente") || e.target.closest(".generar-reporte-docente")) {
+                const btn = e.target.closest(".generar-reporte-docente");
+                const docente = btn.dataset.docente;
+                const periodo = btn.dataset.periodo;
+                const materia = btn.dataset.materia;
 
-            const url = `../Funcionamiento/pdf/reporte_docente.php?matricula_docente=${docente}&periodo_id=${periodo}&materia_id=${materia}`;
-            window.open(url, "_blank");
-        }
-        
-    // Botón de generación de PDF por grupo
-        if (e.target.id === "generar-reporte-grupo") {
-            const periodoId = periodoGrupo.value;
-            const grupoId = grupoSelect.value;
-
-            if (!periodoId || !grupoId) {
-                alert("Por favor, selecciona un período y un grupo.");
-                return;
+                const url = `../Funcionamiento/pdf/reporte_docente.php?matricula_docente=${docente}&periodo_id=${periodo}&materia_id=${materia}`;
+                window.open(url, "_blank");
             }
+            
+        // Botón de generación de PDF por grupo
+            if (e.target.id === "generar-reporte-grupo") {
+                const periodoId = periodoGrupo.value;
+                const grupoId = grupoSelect.value;
 
-            const url = `../Funcionamiento/pdf/reporte_grupal.php?grupo_id=${grupoId}&periodo_id=${periodoId}`;
-            window.open(url, "_blank");
-        }
-    }); 
-}); 
+                if (!periodoId || !grupoId) {
+                    alert("Por favor, selecciona un período y un grupo.");
+                    return;
+                }
+
+                const url = `../Funcionamiento/pdf/reporte_grupal.php?grupo_id=${grupoId}&periodo_id=${periodoId}`;
+                window.open(url, "_blank");
+            }
+        }); 
+    })
 });

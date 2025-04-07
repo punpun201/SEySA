@@ -213,3 +213,8 @@ body {
     border-radius: 6px;
     border: 1px solid #ccc;
 }
+
+.boton-centro {
+    text-align: center;
+    margin-top: 20px;
+}

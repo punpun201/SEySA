@@ -136,7 +136,9 @@ $es_alumno = in_array("Alumno", (array)$roles_usuario);
                     <option value="">Selecciona un grupo</option>
                 </select>
             </div>
+        </div>
 
+        <div class="boton-centro">
             <button id="generar-reporte-grupo" class="btn btn-success mt-3" style="display:none;">
                 <i class="fas fa-file-pdf"></i> Generar Reporte del Grupo
             </button>
